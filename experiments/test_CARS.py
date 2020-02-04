@@ -28,12 +28,14 @@ for g_multiplier in np.linspace(0.025, 3, 20):
     pedestrian = [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'p']
     connector = [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'f']
     g_k = tnet.perturbDemandConstant(tNet.g, constant=g_multiplier)
-    tNet.solveMSA()
     totalObj = []
     for j in range(10):
         tNet.set_g(g_k)
-        tNet = cars.solve_CARS2(tNet, tNet.G, fcoeffs=fcoeffs, xa=0.8)
-        tNet.solveMSA(exogenous_G=tNet.G_supergraph)
+        if j==0:
+            tNet.solveMSA()
+        else:
+            tNet.solveMSA(exogenous_G=tNet.G_supergraph)
+        tNet = cars.solve_CARS2(tNet, exogenous_G=tNet.G, fcoeffs=fcoeffs, xa=0.8)
         exogObj = tnet.get_totalTravelTime(tNet.G, fcoeffs)
         amodObj = cars.get_totalTravelTime(tNet)
         amodObjNoRebalancing = cars.get_totalTravelTime_without_Rebalancing(tNet)

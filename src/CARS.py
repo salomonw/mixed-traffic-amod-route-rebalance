@@ -260,10 +260,10 @@ def solve_CARS2_noRebalancing(tnet, exogenous_G, fcoeffs, xa=1.2):
     for i,j in tnet.G_supergraph.edges():
         if isinstance(i,str) or isinstance(j,str):
             tnet.G_supergraph[i][j]['flow'] = sum(m.getVarByName('x^' + str(w) + '_' + str(i) + '_' + str(j)).X for w in tnet.g.keys())
-            tnet.G_supergraph[i][j]['flowNoRebalancing'] = sum(m.getVarByName('x^' + str(w) + '_' + str(i) + '_' + str(j)).X for w in tnet.g.keys())
+            tnet.G_supergraph[i][j]['flowNoRebalancing'] = tnet.G_supergraph[i][j]['flow']
         else:
             tnet.G_supergraph[i][j]['flow'] = sum(m.getVarByName('x^' + str(w) + '_' + str(i) + '_' + str(j)).X for w in tnet.g.keys())
-            tnet.G_supergraph[i][j]['flowNoRebalancing'] = sum(m.getVarByName('x^' + str(w) + '_' + str(i) + '_' + str(j)).X for w in tnet.g.keys())
+            tnet.G_supergraph[i][j]['flowNoRebalancing'] = tnet.G_supergraph[i][j]['flow']
     return tnet
 
 
@@ -271,6 +271,7 @@ def get_totalTravelTime_approx(tnet, fcoeffs, xa):
     fun = get_approx_fun(fcoeffs, xa=xa, nlines=2)
     beta = get_beta(fun)
     theta = get_theta(fun)
+    print(beta)
     obj=0
     for i,j in tnet.G_supergraph.edges():
         if tnet.G_supergraph[i][j]['flow']/tnet.G_supergraph[i][j]['capacity'] <= xa:
@@ -317,7 +318,7 @@ def get_totalTravelTime(tnet):
     return sum([tnet.G_supergraph[i][j]['flow'] * tnet.G_supergraph[i][j]['t_0'] * travel_time(tnet, i, j) for i, j in tnet.G_supergraph.edges()])
 
 
-def travel_time_without_Rebalancing(tnet, i, j):
+def travel_time_without_Rebalancing(tnet, i, j, exo=0):
     """
     evalute the travel time function for edge i->j
 
@@ -333,9 +334,9 @@ def travel_time_without_Rebalancing(tnet, i, j):
 
     """
     return sum(
-        [tnet.fcoeffs[n] * (tnet.G_supergraph[i][j]['flowNoRebalancing'] / tnet.G_supergraph[i][j]['capacity']) ** n for n in range(len(tnet.fcoeffs))])
+        [tnet.fcoeffs[n] * ((tnet.G_supergraph[i][j]['flow'] +exo )/ tnet.G_supergraph[i][j]['capacity']) ** n for n in range(len(tnet.fcoeffs))])
 
-def get_totalTravelTime_without_Rebalancing(tnet):
+def get_totalTravelTime_without_Rebalancing(tnet, G_exogenous):
     """
     evalute the travel time function on the SuperGraph level
 
@@ -349,7 +350,19 @@ def get_totalTravelTime_without_Rebalancing(tnet):
     float
 
     """
-    return sum([tnet.G_supergraph[i][j]['flowNoRebalancing'] * tnet.G_supergraph[i][j]['t_0'] * travel_time_without_Rebalancing(tnet, i, j) for i, j in tnet.G_supergraph.edges()])
+    if G_exogenous==False:
+        return sum([tnet.G_supergraph[i][j]['flowNoRebalancing'] * tnet.G_supergraph[i][j][
+            't_0'] * travel_time_without_Rebalancing(tnet, i, j) for i, j in
+                    tnet.G_supergraph.edges()])
+    else:
+        ret = 0
+        for i,j in tnet.G_supergraph.edges():
+            if isinstance(tnet.G_supergraph[i][j]['type'], float)==True:
+                ret += tnet.G_supergraph[i][j]['flowNoRebalancing'] * tnet.G_supergraph[i][j]['t_0'] * travel_time_without_Rebalancing(tnet, i, j, G_exogenous[i][j]['flow'])
+            else:
+                ret += tnet.G_supergraph[i][j]['flowNoRebalancing'] * tnet.G_supergraph[i][j]['t_0'] * travel_time_without_Rebalancing(tnet, i, j)
+    return ret
+
 
 
 def get_pedestrian_flow(tnet):
@@ -370,7 +383,7 @@ def get_pedestrian_flow(tnet):
 
 def get_amod_flow(tnet):
     """
-    get pedestrian flow in a supergraph
+    get amod flow in a supergraph
 
     Parameters
     ----------
@@ -403,3 +416,17 @@ def plot_supergraph_pedestrian_flows(G, weight='flow', width=3, cmap=plt.cm.Blue
 	edges, weights = zip(*nx.get_edge_attributes(G, weight).items())
 	nx.draw(G, pos, node_color='b', edgelist=edges, edge_color=weights, width=width, edge_cmap=cmap)
 	return fig, ax
+
+def supergraph2G(tnet):
+    # TODO: add explaination
+    tnet.G = tnet.G_supergraph.subgraph(list([i for i in tnet.G.nodes()]))
+
+
+def add_G_flows_no_rebalancing(array):
+    # TODO: add description
+
+    G = array[0].copy()
+    for tn in array[1:]:
+        for i, j in G.edges():
+            G[i][j]['flow'] += tn[i][j]['flowNoRebalancing']
+    return G

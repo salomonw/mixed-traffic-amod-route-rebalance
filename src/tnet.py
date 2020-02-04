@@ -779,3 +779,22 @@ def flowDiff(graph1, graph2):
         flow2 = graph2[edge[0]][edge[1]]['flow']
         flowDiff_[edge] = flow1-flow2
     return flowDiff_
+
+def normFlowDiff(G_data, G_estimate):
+    """
+    estimate the difference between the flows of two networks
+    with identical network topology.
+
+    Parameters
+    ----------
+
+    G_data: nx network with edge attribute "flow"
+    G_estimate: nx network with edge attribute "flow"
+
+    Returns
+    -------
+    a scalar representing the norm of the flows of two netorks
+
+    """
+    diff = sum([(G_data.get_edge_data(s,t)['flow'] - G_estimate.get_edge_data(s,t)['flow'])**2 for s,t in G_data.edges()])
+    return diff

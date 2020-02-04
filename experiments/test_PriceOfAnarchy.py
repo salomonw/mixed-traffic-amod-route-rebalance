@@ -63,19 +63,21 @@ cars.plot_supergraph_car_flows(tNet)
 
 fig1, ax1 = plt.subplots()
 ax1.plot(x, priceOfAnarchy, '--',  label='Price of Anarchy no walking', color='black')
-plt.legend()
+#ax1.legend(loc=1)
 
 tNet, priceOfAnarchy, percentagePed, amod_flow, x = PoA_experiment(netFile, gFile, posFile, fcoeffs, walk_multiplier=4)
 ax1.plot(x, priceOfAnarchy, label='Price of Anarchy', color='red')
-plt.legend()
+ax1.legend(loc=0)
+
 
 ax2 = ax1.twinx()
 ax2.plot(x, percentagePed, label='% of Pedestrians', color='blue')
 ax2.plot(x, [i/amod_flow[-1:][0]*100 for i in amod_flow], label='Total AMoD veh flow', color='green')
-plt.legend()
-plt.xlabel('Demand')
-plt.ylabel('PoA')
-fig1.tight_layout()
+ax2.legend(loc=1)
+ax2.set_xlabel('Demand multiplier')
+ax1.set_ylabel('PoA')
+ax2.set_ylabel('(%)')
+#fig1.tight_layout()
 
 
 tnet.plot_network_flows(tNet.G, width=3, cmap=plt.cm.Blues)
