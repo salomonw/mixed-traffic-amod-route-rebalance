@@ -1,21 +1,10 @@
 import src.tnet as tnet
-import networkx as nx
 import src.CARS as cars
 import matplotlib.pyplot as plt
 import  numpy as np
 
-#netFile = "data/net/NYC_small_net.txt"
-#gFile = "data/trips/NYC_small_trips.txt"
-
-netFile = "data/net/EMA_net.txt"
-gFile = "data/trips/EMA_trips.txt"
-
-#netFile = "data/net/Braess1_net.txt"
-#gFile = "data/trips/Braess1_trips.txt"
-
-
-fcoeffs = [1,0,0,0,0.15,0]
-
+netFile, gFile, fcoeffs = tnet.get_network_parameters('EMA')
+xa = 0.6
 
 totalObj = []
 percentagePed = []
@@ -35,7 +24,7 @@ for g_multiplier in np.linspace(0.025, 3, 20):
             tNet.solveMSA()
         else:
             tNet.solveMSA(exogenous_G=tNet.G_supergraph)
-        tNet = cars.solve_CARS2(tNet, exogenous_G=tNet.G, fcoeffs=fcoeffs, xa=0.8)
+        tNet = cars.solve_CARS(tNet, exogenous_G=tNet.G, fcoeffs=fcoeffs, xa=xa)
         exogObj = tnet.get_totalTravelTime(tNet.G, fcoeffs)
         amodObj = cars.get_totalTravelTime(tNet)
         amodObjNoRebalancing = cars.get_totalTravelTime_without_Rebalancing(tNet)

@@ -31,15 +31,20 @@ for penetration_rate in np.linspace(0.01,0.99, 10):
         if i==0:
             #tNet_non_cavs.solveMSA()
             #cars.solve_CARS2(tNet_cavs, exogenous_G=False, fcoeffs=fcoeffs, xa=xa, rebalancing=False)
-            cars.solve_CARS(tNet_cavs, exogenous_G=False, fcoeffs=fcoeffs, xa=xa, rebalancing=True)
+            #cars.solve_CARS(tNet_cavs, exogenous_G=False, fcoeffs=fcoeffs, xa=xa, rebalancing=True)
+            tNet_cavs.solveMSAsocial()
+            cars.solve_rebalancing(tNet_cavs, exogenous_G=0)
         else:
             #tNet_non_cavs.solveMSA(exogenous_G=tNet_cavs.G_supergraph)
             #cars.solve_CARS2(tNet_cavs, exogenous_G=tNet_non_cavs.G, fcoeffs=fcoeffs, xa=xa, rebalancing=False)
-            cars.solve_CARS(tNet_cavs, exogenous_G=tNet_non_cavs.G, fcoeffs=fcoeffs, xa=xa, rebalancing=True)
+            #cars.solve_CARS(tNet_cavs, exogenous_G=tNet_non_cavs.G, fcoeffs=fcoeffs, xa=xa, rebalancing=True)
+            tNet_cavs.solveMSAsocial(exogenous_G=tNet_non_cavs.G)
+            cars.solve_rebalancing(tNet_cavs, exogenous_G=0)
 
         #cars.solve_CARS2(tNet_cavs, exogenous_G=tNet_non_cavs.G, fcoeffs=fcoeffs, xa=xa, rebalancing=False)
         #cars.solve_CARS(tNet_cavs, exogenous_G=tNet_non_cavs.G, fcoeffs=fcoeffs, xa=xa, rebalancing=False)
-        cars.supergraph2G(tNet_cavs)
+        #cars.supergraph2G(tNet_cavs)
+        cars.G2supergraph(tNet_cavs)
         tNet_non_cavs.solveMSA(exogenous_G=tNet_cavs.G)
 
         totalCost = tnet.get_totalTravelTime(tNet_non_cavs.G, fcoeffs, G_exogenous=tNet_cavs.G) + cars.get_totalTravelTime_without_Rebalancing(tNet_cavs,  G_exogenous=tNet_non_cavs.G)

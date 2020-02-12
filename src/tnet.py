@@ -798,3 +798,37 @@ def normFlowDiff(G_data, G_estimate):
     """
     diff = sum([(G_data.get_edge_data(s,t)['flow'] - G_estimate.get_edge_data(s,t)['flow'])**2 for s,t in G_data.edges()])
     return diff
+
+
+def get_total_G_flow(G):
+    """
+    get total flow in a graph
+
+    Parameters
+    ----------
+
+    G: networkx graph with edge attribute Flow
+
+    Returns
+    -------
+    float
+
+    """
+    return sum([G[i][j]['flow'] for i,j in G.edges()])
+
+def get_network_parameters(net_name):
+    if net_name == 'Braess1':
+        netFile = "data/net/Braess1_net.txt"
+        gFile = "data/trips/Braess1_trips.txt"
+        fcoeffs = [1, 1, 0, 0, 0., 0]
+    elif net_name == 'EMA':
+        netFile = "data/net/EMA_net.txt"
+        gFile = "data/trips/EMA_trips.txt"
+        fcoeffs = [1, 0, 0, 0, 0.15, 0]
+    elif net_name == 'NYC_small':
+        netFile = "data/net/NYC_small_net.txt"
+        gFile = "data/trips/NYC_small_trips.txt"
+        fcoeffs = [1, 0, 0, 0, 0.15, 0]
+        #fcoeffs  = [1, 0.07363975723108054, 0.049250179014950504, 0.04848249228476019, 0.12321501861763541, 0.017914889834778975]
+
+    return netFile, gFile, fcoeffs

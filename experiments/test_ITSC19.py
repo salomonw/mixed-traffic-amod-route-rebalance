@@ -1,14 +1,12 @@
-
-
 import src.tnet as tnet
+import src.CARS as cars
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
 
-netFile = "data/net/EMA_net.txt"
-gFile = "data/trips/EMA_trips.txt"
-fcoeffs = [1,0,0,0,0.15,0]
-
+#netFile, gFile, fcoeffs = tnet.get_network_parameters('Braess1')
+netFile, gFile, fcoeffs = tnet.get_network_parameters('EMA')
+#netFile, gFile, fcoeffs = tnet.get_network_parameters('NYC_small')
 
 cavsCost=[]
 noncavsCost=[]
@@ -23,13 +21,14 @@ for penetration_rate in np.linspace(0.01,0.99, 10):
 
 
     it = []
-    for i in range(5):
+    for i in range(15):
         if i==0:
             # tnet.solveMSA_julia_social(tNet_cavs)
             tNet_cavs.solveMSAsocial()
         else:
-            # tnet.solveMSA_julia_social(tNet_cavs, G_exo=tNet_non_cavs.G)
             tNet_cavs.solveMSAsocial(exogenous_G=tNet_non_cavs.G)
+            #tnet.solveMSA_julia_social(tNet_cavs, G_exo=tNet_non_cavs.G)
+
 
         #tnet.solveMSA_julia(tNet_non_cavs, G_exo=tNet_cavs.G)
         tNet_non_cavs.solveMSA(exogenous_G=tNet_cavs.G)
@@ -41,12 +40,12 @@ for penetration_rate in np.linspace(0.01,0.99, 10):
         plt.figure()
         plt.plot(it)
 
-    cavsCost.append(tnet.get_totalTravelTime(tNet_cavs.G, fcoeffs, G_exogenous=tNet_non_cavs.G)/tNet_cavs.totalDemand*60)
-    noncavsCost.append(tnet.get_totalTravelTime(tNet_non_cavs.G,fcoeffs, G_exogenous=tNet_cavs.G)/tNet_non_cavs.totalDemand*60)
+    cavsCost.append(tnet.get_totalTravelTime(tNet_cavs.G, fcoeffs, G_exogenous=tNet_non_cavs.G)/tNet_cavs.totalDemand)
+    noncavsCost.append(tnet.get_totalTravelTime(tNet_non_cavs.G,fcoeffs, G_exogenous=tNet_cavs.G)/tNet_non_cavs.totalDemand)
 
     G_total = tnet.add_net_flows([tNet_non_cavs, tNet_cavs])
     totalCost = tnet.get_totalTravelTime(G_total, fcoeffs)
-    totCost.append(tnet.get_totalTravelTime(G_total, fcoeffs)/(tNet_cavs.totalDemand+tNet_non_cavs.totalDemand)*60)
+    totCost.append(tnet.get_totalTravelTime(G_total, fcoeffs)/(tNet_cavs.totalDemand+tNet_non_cavs.totalDemand))
     print(penetration_rate)
     del tNet_cavs, tNet_non_cavs
 
@@ -56,5 +55,3 @@ plt.plot(list(np.linspace(0.0001,1, 10)), cavsCost, label='CAV')
 plt.plot(list(np.linspace(0.0001,1, 10)), noncavsCost, label='NonCAV')
 plt.legend()
 plt.show()
-
-#TODO: check social solution and if they are solving for their own fleet
