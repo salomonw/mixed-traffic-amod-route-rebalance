@@ -81,7 +81,7 @@ def set_optimal_rebalancing_flows(m,tnet):
 def set_CARS_par(tnet):
     # Set obj func parameters
     Vt = 100
-    Vd = 0.1
+    Vd = 0.00001
     Ve = 1
     # Set the electricity constant
     ro = 1
@@ -103,8 +103,8 @@ def solve_CARS2(tnet, exogenous_G, fcoeffs, rebalancing=True, xa=0):
     theta = get_theta(fun)
     theta = [0.7, 1.2]
     beta = [0.53, 1.88]
-    print(theta)
-    print(beta)
+    #print(theta)
+    #print(beta)
 
     Vt, Vd, Ve = set_CARS_par(tnet)
 
@@ -164,7 +164,7 @@ def solve_CARS2(tnet, exogenous_G, fcoeffs, rebalancing=True, xa=0):
 
 
 def solve_CARS(tnet, exogenous_G, fcoeffs, rebalancing=True, xa=0.01):
-    fun = get_approx_fun(fcoeffs, xa=xa, nlines=2, range_=[0,1.5])
+    fun = get_approx_fun(fcoeffs, xa=xa, nlines=2, range_=[0,2])
     beta = get_beta(fun)
     theta = get_theta(fun)
 
@@ -438,8 +438,8 @@ def supergraph2G(tnet):
 def G2supergraph(tnet):
     # TODO: add explaination
     tnet.G_supergraph = tnet.G
-    #for i,j in tnet.G_supergraph:
-    #    tnet.G_supergraph[i][j]['flowNoRebalancing'] = tnet.G_supergraph[i][j]['flow']
+    for i,j in tnet.G_supergraph.edges():
+        tnet.G_supergraph[i][j]['flowNoRebalancing'] = tnet.G_supergraph[i][j]['flow']
 
 def add_G_flows_no_rebalancing(array):
     # TODO: add description

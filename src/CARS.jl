@@ -1,5 +1,3 @@
-
-
 using JSON
 using JuMP, Ipopt
 
@@ -17,21 +15,26 @@ function read_nx_file(fname, flow)
     #TODO: write description
     G_dict = read_json_file(fname)
     G = Dict()
-    nodes = Int64[]
+    nodes = []
     for edge in G_dict["links"]
-        G[(edge["source"],edge["target"])] = Dict()
-        push!(nodes, edge["source"])
-        push!(nodes, edge["target"])
+        s = string(edge["source"])
+        t = string(edge["target"])
+        G[(s,t)] = Dict()
+        push!(nodes, s)
+        push!(nodes, t)
         nodes = unique(nodes)
+
+        G[(s,t)]["source"] = s
+        G[(s,t)]["target"] = t
 
         if flow == 0
             for att in ["capacity", "length", "t_0"]
-                G[(edge["source"],edge["target"])][att] = edge[att]
+                G[(s,t)][att] = edge[att]
 
             end
         else
             for att in ["capacity", "length", "t_0", "flow"]
-                G[(edge["source"],edge["target"])][att] = edge[att]
+                G[(s,t)][att] = edge[att]
             end            
         end
     end
@@ -53,76 +56,119 @@ function read_g(fname)
     dict2 = read_json_file(fname)
     for od in keys(dict2)
         a = split(split(split(od, "(")[2],")")[1],",")
-        g_dict[(parse(Int64, a[1]), parse(Int64, a[2]))] = dict2[od]
+        g_dict[(a[1], a[2][2:end])] = dict2[od]
     end
     return g_dict
 end
 
 
 function get_incoming_edges(G, i)
-
+    a = []
+    a = unique([if G[k]["target"]==i G[k]["source"] else 0 end for k in keys(G)])
+    filter!(x->x≠0,a)
+    return a
 end
 
 
 
 function get_outgoing_edges(G, i)
-
+    a = []
+    a = unique([if G[k]["source"]==i G[k]["target"] else 0 end for k in keys(G)])
+    filter!(x->x≠0,a)
+    return a
 end
 
+
+function add_demand_cnstr(model,G,g,xc,nodes)
+    od_pairs = keys(g)
+    links = keys(G)
+    for j in nodes
+        for od in od_pairs
+            if od[1] == j 
+                @constraint(m, sum(xc[od][(i,j)] for i in get_incoming_edges(G, j)) + g[od] == sum(xc[od][(j,i)] for i in get_outgoing_edges(G, j)) )
+            elseif od[2] == j
+                @constraint(m, sum(xc[od][(i,j)] for i in get_incoming_edges(G, j)) == g[od] + sum(xc[od][(j,i)] for i in get_outgoing_edges(G, j)) )
+            else
+                @constraint(m, sum(xc[od][(i,j)] for i in get_incoming_edges(G, j)) == sum(xc[od][(j,i)] for i in get_outgoing_edges(G, j)) )
+            end
+        end
+    end
+end
+
+
+function add_rebalancing_cnstr(m,G,xc,xr,nodes)
+    od_pairs = keys(g)
+    @constraint(m, [j in nodes], sum(xr[(i,j)] + sum(xc[od][(i,j)] for od in od_pairs) for i in get_incoming_edges(G, j)) == sum(xr[(j,k)] + sum(xc[od][(j,k)] for od in od_pairs) for k in get_outgoing_edges(G, j)))
+end
+
+
+function define_xc_vars(od_pairs, links)
+    xc = Dict()
+    for od in od_pairs
+        xc[od] = Dict()
+        for link in links
+            xc[od][link] = @variable(m, lower_bound=0)
+            set_name(xc[od][link], string("xc-(",od[1],",",od[2],")-(",link[1],",",link[2],")"))
+        end
+    end
+    return xc
+end
+
+function define_xr_vars(links)
+    xr = Dict()
+    for link in links
+        xr[link] = @variable(m, lower_bound=0)
+        set_name(xr[link], string("xr-(",link[1],",",link[2],")"))
+    end
+    return xr
+end
+
+function print_sol(m, xc, xr, od_pairs, links, flag=1)
+    if flag == 1
+        for od in od_pairs
+            xc[od] = Dict()
+            for link in links
+                var = string("xc-(",od[1],",",od[2],")-(",link[1],",",link[2],")")
+                println(var, "= ", value(variable_by_name(m, var)))
+            end
+        end
+        
+        for link in links
+            var = 
+            println(value(variable_by_name(m, string("xr-(",link[1],",",link[2],")"))))
+        end
+    else
+        return 0
+    end
+end
+
+
+
+
+
 G, nodes = read_nx_file("tmp/G.json", 0)
-G_exogenous = read_nx_file("tmp/exogenous_G.json", 1)
+#G_supergraph, nodes_supergraph = read_nx_file("tmp/G_supergraph.json", 0)
+#G_exogenous = read_nx_file("tmp/exogenous_G.json", 1)
 fcoeffs = read_fcoeffs("tmp/fcoeffs.json")
 g = read_g("tmp/g.json")
 
-print(nodes)
 od_pairs = keys(g)
 links = keys(G)
 N = length(fcoeffs)
 
-numLinks = length(G)
-
 m = Model(with_optimizer(Ipopt.Optimizer))
 
 # Define variables
-xc = Dict()
-for od in od_pairs
-    xc[od] = Dict()
-    for link in links
-        xc[od][link] = @variable(m)#base_name=string("xc-",parse(od,String), "-", parse(link,String)))
-    end
-end
+xc = define_xc_vars(od_pairs, links)
+xr = define_xr_vars(links)
 
+## Define Objective
+@NLobjective(m, Min, sum(  sum(xc[od][link] for od in od_pairs) * G[link]["t_0"]* sum( fcoeffs[n]* ((sum(xc[od][link] for od in od_pairs))/G[link]["capacity"])^(n-1) for n=1:N ) for link in links))
 
-# Define Objective
-@NLobjective(m, Min, sum(  sum(xc[od][link] for od in od_pairs) * G[link]["t_0"] * sum( fcoeffs[n]* sum(xc[od][link] for od in od_pairs)^(n-1) for n=1:N ) for link in links))
+## Define Constraints
+add_demand_cnstr(m, G, g, xc, nodes)
+add_rebalancing_cnstr(m, G, xc, xr, nodes)
 
-# Define Constraints
-for j in nodes
-    for od in od_pairs
-        if od[1] == j
-            @constraint(x[od][j])
-        elseif od[2] == j
+optimize!(m)
 
-        else
-    end
-end
-
-
-for j in tnet.G_supergraph.nodes():
-    for w, d in tnet.g.items():
-        if j == w[0]:
-            m.addConstr(quicksum(m.getVarByName('x^'+str(w)+'_'+str(i)+'_'+str(j)) for i,l in tnet.G_supergraph.in_edges(nbunch=j)) + d == quicksum(m.getVarByName('x^'+str(w)+'_'+str(j)+'_'+str(k)) for l,k in tnet.G_supergraph.out_edges(nbunch=j)))
-        elif j == w[1]:
-            m.addConstr(quicksum(m.getVarByName('x^' + str(w) + '_' + str(i) + '_' + str(j)) for i,l in tnet.G_supergraph.in_edges(nbunch=j)) == quicksum(m.getVarByName('x^' + str(w) + '_' + str(j) + '_' + str(k)) for l,k in tnet.G_supergraph.out_edges(nbunch=j)) + d)
-        else:
-            m.addConstr(quicksum(m.getVarByName('x^' + str(w) + '_' + str(i) + '_' + str(j)) for i,l in tnet.G_supergraph.in_edges(nbunch=j)) == quicksum(m.getVarByName('x^' + str(w) + '_' + str(j) + '_' + str(k)) for l,k in tnet.G_supergraph.out_edges(nbunch=j)))
-
-m.update()
-
-
-#print(obj)
-#@NLobjective()
-#@NLobjective(m, Min, obj)
-
-# Define constraints
-#@constraint(m::Model, expr)
+#print_sol(m, xc, xr, od_pairs, links, 1)
