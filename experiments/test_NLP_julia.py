@@ -14,7 +14,7 @@ tNet.build_supergraph(walk_multiplier=0.115)
 pedestrian = [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'p']
 connector = [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'f']
 
-
+print(tNet.G_supergraph.edges(data=True))
 tNet.solveMSA()
 cars.solve_social_Juliajson(tNet, exogenous_G=tNet.G)
 

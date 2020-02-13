@@ -113,17 +113,17 @@ class tNet():
         An attribute on the object containing the pedestrian network
 
         """
-        G = self.G.copy()
+        G2 = self.G.copy()
         for i, j in self.G.edges():
-            G.add_edge(str(i) + "'", str(j) + "'", length=self.G[i][j]['length'],
+            G2.add_edge(str(i) + "'", str(j) + "'", length=self.G[i][j]['length'],
                        t_0=self.G[i][j]['length'] * walk_multiplier, capacity=10000000000, type='p')
-            G.add_edge(str(j) + "'", str(i) + "'", length=self.G[i][j]['length'],
+            G2.add_edge(str(j) + "'", str(i) + "'", length=self.G[i][j]['length'],
                        t_0=self.G[i][j]['length'] * walk_multiplier, capacity=10000000000, type='p')
-            G.add_edge(i, str(i) + "'", t_0=0, capacity=99999999, type='f')
-            G.add_edge(str(i) + "'", i, t_0=0, capacity=99999999, type='f')
-            G.add_edge(j, str(j) + "'", t_0=0, capacity=99999999, type='f')
-            G.add_edge(str(j) + "'", j, t_0=0, capacity=99999999, type='f')
-        self.G_supergraph = G
+            G2.add_edge(i, str(i) + "'", t_0=0, capacity=99999999, type='f', length=0.1)
+            G2.add_edge(str(i) + "'", i, t_0=0, capacity=99999999, type='f', length=0.1)
+            G2.add_edge(j, str(j) + "'", t_0=0, capacity=99999999, type='f', length=0.1)
+            G2.add_edge(str(j) + "'", j, t_0=0, capacity=99999999, type='f', length=0.1)
+        self.G_supergraph = G2
 
     def solveMSA(self, exogenous_G=False):
         """

@@ -62,6 +62,14 @@ function read_g(fname)
 end
 
 
+function dict2json(dict, fname)
+    json_string = JSON.json(dict)
+    open(fname,"w") do f 
+        write(f, json_string) 
+    end
+end
+
+
 function get_incoming_edges(G, i)
     a = []
     a = unique([if G[k]["target"]==i G[k]["source"] else 0 end for k in keys(G)])
@@ -123,6 +131,30 @@ function define_xr_vars(links)
     return xr
 end
 
+
+function sol2dict(m, G, xc, xr, od_pairs, links)
+    dict = Dict()
+    for link in links
+        flow = 0
+        for od in od_pairs
+            var = string("xc-(",od[1],",",od[2],")-(",link[1],",",link[2],")")
+            flow +=  value(variable_by_name(m, var))
+        end
+        reb_var = value(variable_by_name(m, string("xr-(",link[1],",",link[2],")")))
+        dict[link] = Dict()
+        dict[link]["flow"] = flow + reb_var
+        dict[link]["flowNoRebalancing"] = flow - reb_var
+    end
+    return dict
+end
+
+function export_results(m, G, xc, xr, od_pairs, links, fname)
+    dict = sol2dict(m, G, xc, xr, od_pairs, links)
+    dict2json(dict, fname)
+
+
+end
+
 function print_sol(m, xc, xr, od_pairs, links, flag=1)
     if flag == 1
         for od in od_pairs
@@ -147,10 +179,13 @@ end
 
 
 G, nodes = read_nx_file("tmp/G.json", 0)
-#G_supergraph, nodes_supergraph = read_nx_file("tmp/G_supergraph.json", 0)
-#G_exogenous = read_nx_file("tmp/exogenous_G.json", 1)
+G, nodes = read_nx_file("tmp/G_supergraph.json", 0)
+#G_exogenous, nodes_ex = read_nx_file("tmp/exogenous_G.json", 1)
+G_exogenous = "False"
 fcoeffs = read_fcoeffs("tmp/fcoeffs.json")
 g = read_g("tmp/g.json")
+out_file = "tmp/out.json"
+
 
 od_pairs = keys(g)
 links = keys(G)
@@ -162,13 +197,25 @@ m = Model(with_optimizer(Ipopt.Optimizer))
 xc = define_xc_vars(od_pairs, links)
 xr = define_xr_vars(links)
 
+# Define sum od flow
+x = Dict()
+for link in links
+    x[link] = @NLexpression(m, sum(xc[od][link] for od in od_pairs))
+end
+
 ## Define Objective
-@NLobjective(m, Min, sum(  sum(xc[od][link] for od in od_pairs) * G[link]["t_0"]* sum( fcoeffs[n]* ((sum(xc[od][link] for od in od_pairs))/G[link]["capacity"])^(n-1) for n=1:N ) for link in links))
+if G_exogenous == "False"
+    @NLobjective(m, Min, sum( x[link]* G[link]["t_0"]* sum( fcoeffs[n]* ((x[link])/G[link]["capacity"])^(n-1) for n=1:N ) for link in links))
+else
+    @NLobjective(m, Min, sum( x[link]* G[link]["t_0"]* sum( fcoeffs[n]*((x[link] + G_exogenous[link]["flow"])/G[link]["capacity"])^(n-1) for n=1:N ) for link in links))
+end
 
 ## Define Constraints
 add_demand_cnstr(m, G, g, xc, nodes)
 add_rebalancing_cnstr(m, G, xc, xr, nodes)
 
 optimize!(m)
+
+export_results(m, G, xc, xr, od_pairs, links, out_file)
 
 #print_sol(m, xc, xr, od_pairs, links, 1)
