@@ -54,10 +54,10 @@ class tNet():
         self.node_id_map = node_id_map
         self.fcoeffs = fcoeffs
         self.nPoly = len(fcoeffs)
-        self.TAP = self.build_TAP()
+        self.TAP = self.build_TAP(self.G)
         self.incidence_matrix, self.link_id_dict = incidence_matrix(self.G)
 
-    def build_TAP(self):
+    def build_TAP(self, G):
         """
 	    Build a traffic assignment object based on the traffic network 
 	    Jurgen Hackl <hackl@ibi.baug.ethz.ch>
@@ -76,7 +76,7 @@ class tNet():
         assert (self.totalDemand > 0), "Total demand is zero!!"
         assert (self.nNodes > 0), "No nodes in graph!!"
         assert (self.nLinks > 0), "No links in graph!!"
-        TAP = msa.TrafficAssignment(self.G, self.gGraph, fcoeffs=self.fcoeffs, iterations=350)
+        TAP = msa.TrafficAssignment(G, self.gGraph, fcoeffs=self.fcoeffs, iterations=350)
         return TAP
 
     def build_pedestrian_net(self):
@@ -99,7 +99,7 @@ class tNet():
             G.add_edge(j, i, length=self.G[i][j]['length'])
         self.G_pedestrian = G
 
-    def build_supergraph(self, walk_multiplier=7):
+    def build_supergraph(self, walk_multiplier=1):
         """
         build a supergraph mixing pedestrian and vehicle networks
 
@@ -116,13 +116,13 @@ class tNet():
         G2 = self.G.copy()
         for i, j in self.G.edges():
             G2.add_edge(str(i) + "'", str(j) + "'", length=self.G[i][j]['length'],
-                       t_0=self.G[i][j]['length'] * walk_multiplier, capacity=10000000000, type='p')
+                       t_0=self.G[i][j]['length'] / 3.1 / walk_multiplier, capacity=10000000000, type='p')
             G2.add_edge(str(j) + "'", str(i) + "'", length=self.G[i][j]['length'],
-                       t_0=self.G[i][j]['length'] * walk_multiplier, capacity=10000000000, type='p')
-            G2.add_edge(i, str(i) + "'", t_0=0, capacity=99999999, type='f', length=0.1)
-            G2.add_edge(str(i) + "'", i, t_0=0, capacity=99999999, type='f', length=0.1)
-            G2.add_edge(j, str(j) + "'", t_0=0, capacity=99999999, type='f', length=0.1)
-            G2.add_edge(str(j) + "'", j, t_0=0, capacity=99999999, type='f', length=0.1)
+                       t_0=self.G[i][j]['length'] / 3.1 / walk_multiplier, capacity=10000000000, type='p')
+            G2.add_edge(i, str(i) + "'", t_0=0.1, capacity=99999999, type='f', length=0.1)
+            G2.add_edge(str(i) + "'", i, t_0=0.1, capacity=99999999, type='f', length=0.1)
+            G2.add_edge(j, str(j) + "'", t_0=0.1, capacity=99999999, type='f', length=0.1)
+            G2.add_edge(str(j) + "'", j, t_0=0.1, capacity=99999999, type='f', length=0.1)
         self.G_supergraph = G2
 
     def solveMSA(self, exogenous_G=False):
@@ -143,7 +143,7 @@ class tNet():
         self.TAP.run(fcoeffs=self.fcoeffs, build_t0=False, exogenous_G=exogenous_G)
         self.G = self.TAP.graph
 
-    def solveMSAsocial(self, build_t0=False, exogenous_G=False):
+    def solveMSAsocial_supergraph(self, build_t0=False, exogenous_G=False):
         """
 	    Solve the MSA social flows for a traffic network using the MSA module by
 	    Jurgen Hackl <hackl@ibi.baug.ethz.ch>
@@ -158,8 +158,9 @@ class tNet():
 	    An nx object.
 
 	    """
+        self.build_TAP(self.G_supergraph)
         self.TAP.run_social(fcoeffs=self.fcoeffs, build_t0=build_t0, exogenous_G=exogenous_G)
-        self.G = self.TAP.graph
+        self.G_supergraph = self.TAP.graph
 
     def set_fcoeffs(self, fcoeff):
         """
@@ -199,7 +200,7 @@ class tNet():
         self.totalDemand = sum(g.values())
         self.g = g
         self.gGraph = buildDemandGraph(g)
-        self.TAP = self.build_TAP()
+        self.TAP = self.build_TAP(self.G)
 
     def read_flow_file(self, fname):
         """
@@ -816,7 +817,10 @@ def get_total_G_flow(G):
     """
     return sum([G[i][j]['flow'] for i,j in G.edges()])
 
-def get_network_parameters(net_name):
+
+from datetime import datetime
+
+def get_network_parameters(net_name, experiment_name='_'):
     if net_name == 'Braess1':
         netFile = "data/net/Braess1_net.txt"
         gFile = "data/trips/Braess1_trips.txt"
@@ -830,5 +834,26 @@ def get_network_parameters(net_name):
         gFile = "data/trips/NYC_small_trips.txt"
         fcoeffs = [1, 0, 0, 0, 0.15, 0]
         #fcoeffs  = [1, 0.07363975723108054, 0.049250179014950504, 0.04848249228476019, 0.12321501861763541, 0.017914889834778975]
+    elif net_name == 'NYC_Uber_small':
+        netFile = "data/net/NYC_Uber_small_net.txt"
+        gFile = "data/trips/NYC_Uber_small_trips.txt"
+        fcoeffs = [1, 0, 0, 0, 0.15, 0]
+    elif net_name == 'NYC_Uber_small_1':
+        netFile = "data/net/NYC_Uber_small_net.txt"
+        gFile = "data/trips/hola2.txt"
+        fcoeffs = [1, 0, 0, 0, 0.15, 0]
+        #fcoeffs = [1, 0.07363975723108054, 0.049250179014950504, 0.04848249228476019, 0.12321501861763541,
+        #           0.017914889834778975]
+    elif net_name == 'berlin-tiergarten':
+        netFile = "data/net/berlin-tiergarten_net.txt"
+        gFile = "data/trips/berlin-tiergarten_trips.txt"
+        fcoeffs = [1, 0, 0, 0, 0.15, 0]
+    elif net_name == 'Anaheim':
+        netFile = "data/net/Anaheim_net.txt"
+        gFile = "data/trips/Anaheim_trips.txt"
+        fcoeffs = [1, 0, 0, 0, 0.15, 0]
 
-    return netFile, gFile, fcoeffs
+    tstamp = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+    dir_out = tstamp + "_"+ experiment_name
+
+    return netFile, gFile, fcoeffs, tstamp, dir_out

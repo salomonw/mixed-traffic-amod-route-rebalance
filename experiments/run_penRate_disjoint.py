@@ -3,10 +3,10 @@ import src.CARS as cars
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
-
+from src.utils import *
 
 #netFile, gFile, fcoeffs = tnet.get_network_parameters('Braess1')
-netFile, gFile, fcoeffs = tnet.get_network_parameters('EMA')
+netFile, gFile, fcoeffs, tstamp, dir_out = tnet.get_network_parameters('EMA', experiment_name='EMA_penRate_disjoint')
 #netFile, gFile, fcoeffs = tnet.get_network_parameters('NYC_small')
 xa = 0.8
 
@@ -24,7 +24,7 @@ for penetration_rate in np.linspace(0.01,0.99, 10):
     g_non_cavs = tnet.perturbDemandConstant(tNet_cavs.g, constant=(1-penetration_rate))
     tNet_cavs.set_g(g_cavs)
     tNet_non_cavs.set_g(g_non_cavs)
-    tNet_cavs.build_supergraph(walk_multiplier=.80)
+    tNet_cavs.build_supergraph()
 
     it = []
     for i in range(10):
@@ -69,11 +69,15 @@ for penetration_rate in np.linspace(0.01,0.99, 10):
     del tNet_cavs, tNet_non_cavs
 
 
+mkdir_n('results/' + dir_out)
 plt.figure()
 plt.plot(list(np.linspace(0.0001,1, 10)), totCost, label='Total, t(x+u+r)(x+u)')
 plt.plot(list(np.linspace(0.0001,1, 10)), cavsCost, label='CAV, t(x+u+r)(x)')
 plt.plot(list(np.linspace(0.0001,1, 10)), noncavsCost, label='NonCAV, t(x+u+r)(u)')
 plt.legend()
+plt.xlabel('Penetration Rate')
+plt.ylabel('Avg. Travel Time (hrs)')
+plt.savefig('results/' + dir_out +'/costs.png', dpi=300)
 
 plt.figure()
 width = 0.5

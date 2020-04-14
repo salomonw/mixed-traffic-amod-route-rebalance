@@ -3,7 +3,7 @@ import src.CARS as cars
 import matplotlib.pyplot as plt
 import  numpy as np
 
-netFile, gFile, fcoeffs = tnet.get_network_parameters('EMA')
+netFile, gFile, fcoeffs, tstamp, dir_out = tnet.get_network_parameters('EMA', experiment_name='EMA_CARS_precision')
 xa = 0.6
 
 totalObj = []
@@ -12,7 +12,7 @@ x= []
 poa =[]
 for g_multiplier in np.linspace(0.025, 3, 20):
     tNet = tnet.tNet(netFile=netFile, gFile=gFile, fcoeffs=fcoeffs)
-    tNet.build_supergraph(walk_multiplier=0.115)
+    tNet.build_supergraph()
 
     pedestrian = [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'p']
     connector = [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'f']

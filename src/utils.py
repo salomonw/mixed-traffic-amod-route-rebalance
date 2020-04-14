@@ -174,6 +174,26 @@ def dict2json(dict_, fname):
     with open(fname, 'w') as fp:
         json.dump(dict_, fp)
 
+
+def json2dict(fname):
+    """
+    reads a json dictionary from a file
+
+    Parameters
+    ----------
+    dict_: a dictionary we aim to save
+    fname: name of the output file
+
+    Returns
+    -------
+    a csv file
+
+    """
+    with open(fname, 'r') as f:
+        dict = json.load(f)
+    return dict
+
+
 def shell(command, printOut=True):
     """
     Run shell commands in Linux, decide if printing or not the output in console

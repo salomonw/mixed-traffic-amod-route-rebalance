@@ -13,4 +13,4 @@ pos = nx.get_node_attributes(tNet.G,'pos')
 nx.draw(tNet.G, pos)
 plt.show()
 
-tNet.build_supergraph(walk_multiplier=walk_multiplier)
+tNet.build_supergraph()
