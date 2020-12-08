@@ -4,10 +4,12 @@
 #$ -N routing_rebalancing
 #$ -j y
 #$ -m bae
+#$ -t 50
+#$ -l h_rt=18:00:00
 
 # Load Modules
 module load python3
-module load gurobi
+module load gurobi/9.0.0
 
 # Run program
-python3 -m experiments/run_penRate_intermodal_journal
+python3 -m experiments.run_penRate_intermodal_journal
