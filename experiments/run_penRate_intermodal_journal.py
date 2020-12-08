@@ -105,7 +105,7 @@ def solve_stackelberg_game(par):
                                   rebalancing=False, bush=True, userCentric=True,
                                   exogenous_G=tNet_cavs.G_supergraph, linear=linear,
                                   theta_n=theta_n, theta=theta_non_cavs, a=a_non_cavs, od_flows_flag=False)
-        #cars.G2supergraph(tNet_non_cavs)
+       #cars.G2supergraph(tNet_non_cavs)
         #cars.supergraph2G(tNet_non_cavs)
 
         cavscost_ = cars.get_totalTravelTime_without_Rebalancing(tNet_cavs, G_exogenous=tNet_non_cavs.G_supergraph)
@@ -272,14 +272,14 @@ netname = 'NYC'#  |||  g=1 --> theta_n = 1.5 |||   |||  g=2 --> theta_n =3 |||
 #netname = 'Sioux Falls'
 
 rebalancing = True
-n = 6
+n = 5
 n_iter = 5
 #demand_multiplier = 2
 theta_n = 3
-linear = True
-parallel = False
+linear = False
+parallel = True
 for demand_multiplier in [1]:#,2,4]:
-    for netname in ['NYC']:
+    for netname in ['EMA_mid']:
     #for netname in ['NYC']:
         if netname == "NYC":
             parallel = True

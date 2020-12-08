@@ -1,0 +1,13 @@
+#!/bin/bash -l
+
+#$ -P noc-lab
+#$ -N routing_rebalancing
+#$ -j y
+#$ -m bae
+
+# Load Modules
+module load python3
+module load gurobi
+
+# Run program
+python3 -m experiments/run_penRate_intermodal_journal
