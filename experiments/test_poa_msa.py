@@ -2,9 +2,7 @@ import src.tnet as tnet
 import numpy as np
 import matplotlib.pyplot as plt
 
-netFile = "data/net/EMA_net.txt"
-gFile = "data/trips/EMA_trips.txt"
-fcoeffs = [1,0,0,0,0.15,0]
+netFile, gFile, fcoeffs = tnet.get_network_parameters('EMA')
 
 demand_multiplier = list(np.linspace(0.5, 4, 25))
 poa = []

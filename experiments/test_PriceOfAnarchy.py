@@ -3,9 +3,9 @@ import networkx as nx
 import src.CARS as cars
 import matplotlib.pyplot as plt
 import numpy as np
+from src.utils import *
 
-
-def PoA_experiment(netFile, gFile, posFile, fcoeffs, walk_multiplier):
+def PoA_experiment(netFile, gFile, posFile, fcoeffs, walk_multiplier, xa):
     priceOfAnarchy = []
     percentagePed = []
     x = []
@@ -13,21 +13,20 @@ def PoA_experiment(netFile, gFile, posFile, fcoeffs, walk_multiplier):
     amod = []
     amod_flow = []
 
-    for g_multiplier in np.linspace(0.025, 4, 25):
+    for g_multiplier in np.linspace(0.025, 4, 15):
         print(g_multiplier)
 
         tNet = tnet.tNet(netFile=netFile, gFile=gFile, fcoeffs=fcoeffs)
-        tNet.read_node_coordinates(posFile)
-        tNet.build_supergraph(walk_multiplier=walk_multiplier)
+        #tNet.read_node_coordinates(posFile)
+        tNet.build_supergraph()
 
-        pedestrian = [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'p']
-        connector = [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'f']
+        [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'p']
+        [(u, v) for (u, v, d) in tNet.G_supergraph.edges(data=True) if d['type'] == 'f']
 
         g_k = tnet.perturbDemandConstant(tNet.g.copy(), constant=g_multiplier)
         tNet.set_g(g_k)
-        tNet = cars.solve_CARS2_noRebalancing(tNet, exogenous_G=0, fcoeffs=fcoeffs, xa=0.01)
+        tNet = cars.solve_CARS(tNet, exogenous_G=0, fcoeffs=fcoeffs, xa=xa, rebalancing=False)
         tNet.solveMSA()
-        #tnet.solveMSA_julia(tNet)
         exogObj = tnet.get_totalTravelTime(tNet.G, fcoeffs)
         amodObjNoRebalancing = cars.get_totalTravelTime(tNet)
         exo.append(exogObj)
@@ -40,44 +39,43 @@ def PoA_experiment(netFile, gFile, posFile, fcoeffs, walk_multiplier):
     return tNet, priceOfAnarchy, percentagePed, amod_flow, x
 
 
-#netFile = "data/net/NYC_small_net.txt"
-#gFile = "data/trips/NYC_small_trips.txt"
 
-# for EMA use walk multiplier of 0.12 and range between 0 and 8
-#netFile = "data/net/EMA_net.txt"
-#gFile = "data/trips/EMA_trips.txt"
+#netFile, gFile, fcoeffs = tnet.get_network_parameters('Braess1')
+posFile = 'data/pos/Braess1_pos.txt'
+#netFile, gFile, fcoeffs = tnet.get_network_parameters('NYC_Uber_small')
+netFile, gFile, fcoeffs, tstamp, dir_out = tnet.get_network_parameters('EMA', experiment_name='EMA_PoA_experiment')
 
-# for braess use walk multiplier of 7 and range between 0 and 4
-netFile = "data/net/Braess1_net.txt"
-gFile = "data/trips/Braess1_trips.txt"
-posFile = "data/pos/Braess1_pos.txt"
-
-fcoeffs = [1,1,0,0,0,0]
+xa =1.2
 
 fig, ax1 = plt.subplots()
 
-tNet, priceOfAnarchy, percentagePed, amod_flow, x = PoA_experiment(netFile, gFile, posFile, fcoeffs, walk_multiplier=100000000)
+tNet, priceOfAnarchy, percentagePed, amod_flow, x = PoA_experiment(netFile, gFile, posFile, fcoeffs, walk_multiplier=100000000, xa=xa)
 
-tnet.plot_network_flows(tNet.G, width=3, cmap=plt.cm.Blues)
-cars.plot_supergraph_car_flows(tNet)
+#tnet.plot_network_flows(tNet.G, width=3, cmap=plt.cm.Blues)
+#cars.plot_supergraph_car_flows(tNet)
 
 fig1, ax1 = plt.subplots()
 ax1.plot(x, priceOfAnarchy, '--',  label='Price of Anarchy no walking', color='black')
-plt.legend()
+#ax1.legend(loc=1)
 
-tNet, priceOfAnarchy, percentagePed, amod_flow, x = PoA_experiment(netFile, gFile, posFile, fcoeffs, walk_multiplier=4)
+tNet, priceOfAnarchy, percentagePed, amod_flow, x = PoA_experiment(netFile, gFile, posFile, fcoeffs, walk_multiplier=4, xa=xa)
 ax1.plot(x, priceOfAnarchy, label='Price of Anarchy', color='red')
-plt.legend()
+ax1.legend(loc=0)
+
 
 ax2 = ax1.twinx()
 ax2.plot(x, percentagePed, label='% of Pedestrians', color='blue')
 ax2.plot(x, [i/amod_flow[-1:][0]*100 for i in amod_flow], label='Total AMoD veh flow', color='green')
-plt.legend()
-plt.xlabel('Demand')
-plt.ylabel('PoA')
-fig1.tight_layout()
+ax2.legend(loc=1)
+ax2.set_xlabel('Demand multiplier')
+ax1.set_ylabel('PoA')
+ax2.set_ylabel('(%)')
+#fig1.tight_layout()
 
 
-tnet.plot_network_flows(tNet.G, width=3, cmap=plt.cm.Blues)
+#tnet.plot_network_flows(tNet.G, width=3, cmap=plt.cm.Blues)
 
-plt.show()
+mkdir_n('results/' + dir_out)
+plt.savefig('results/' + dir_out +'/PoA_plot.png', dpi=300)
+
+#plt.show()

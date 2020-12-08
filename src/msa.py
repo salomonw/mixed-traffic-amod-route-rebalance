@@ -35,6 +35,11 @@ from scipy.sparse import coo_matrix
 from multiprocessing import Pool
 from src.utils import *
 
+
+import multiprocessing as mp
+
+
+
 class TrafficAssignment(object):
     """Traffic model to estimate the flow, velocity and travel time on a road
     network.
@@ -87,12 +92,11 @@ class TrafficAssignment(object):
     .. [1] Juan de Dios Ortuzar and Luis G. Willumsen (2011) Modelling Transport, Fourth Edition. John Wiley and Sons.
     """
 
-    def __init__(self, graph, od_graph, od_matrix=None, paths=False, fcoeffs=[1,0,0,0,0.15,0], threshold=1e-5, iterations=350):
+    def __init__(self, graph, od_graph, od_matrix=None, fcoeffs=[1,0,0,0,0.15,0], threshold=5e-4, iterations=400):
 
         self.graph = graph
         self.od_graph = od_graph
         self.od_matrix = od_matrix
-        self.paths = paths
         self.lost_trips = {}
         self.cut_links = []
 
@@ -114,243 +118,231 @@ class TrafficAssignment(object):
         self.graph[edge[0]][edge[1]][attribute] = value
 
     def calculate_initial_traveltime(self):
-        for edge in self.graph.edges():
-            initial_traveltime = self.get_edge_attribute(
-                edge, 'length') / self.unit_factor / self.get_edge_attribute(edge, 'speedlimit')
-            self.set_edge_attribute(edge, 't_0', initial_traveltime)
+        [self.set_edge_attribute(edge, 't_0', self.get_edge_attribute(edge, 'length') \
+                                 / self.unit_factor / self.get_edge_attribute(edge, 'speedlimit'))\
+                                for edge in self.graph.edges()]
 
     def set_initial_traveltimes(self):
-        for edge in self.graph.edges():
-            self.set_edge_attribute(
-                edge, 't_k', self.get_edge_attribute(edge, 't_0'))
-            self.set_edge_attribute(edge, 't_h', 0)
+        [self.set_edge_attribute(edge, 't_k', self.get_edge_attribute(edge, 't_0')) for edge in self.graph.edges()]
+        [self.set_edge_attribute(edge, 't_h', 0) for edge in self.graph.edges()]
 
     def set_initial_flow(self):
-        for edge in self.graph.edges():
-            self.set_edge_attribute(edge, 'flow', 0)
+        [self.set_edge_attribute(edge, 'flow', 0) for edge in self.graph.edges()]
 
     def set_initial_help_flow(self):
-        for edge in self.graph.edges():
-            self.set_edge_attribute(edge, 'help_flow', 0)
+        [self.set_edge_attribute(edge, 'help_flow', 0) for edge in self.graph.edges()]
 
     def set_od_matix(self, od_matrix):
-        for edge in self.od_graph.edges():
-            s = edge[0]
-            t = edge[1]
+        for s,t in self.od_graph.edges():
             self.od_graph[s][t]['demand'] = od_matrix[s, t]
 
+    #@timeit
     def set_help_traveltime(self):
-        for edge in self.graph.edges():
-            self.set_edge_attribute(
-                edge, 't_h', self.get_edge_attribute(edge, 't_k'))
+        [self.set_edge_attribute(edge, 't_h', \
+                self.get_edge_attribute(edge, 't_k')) for edge in self.graph.edges()]
 
-    def calculate_auxiliary_flows(self, phi):
+
+    def solve_and_assign_sp(self, ods, weight='t_k'):
+        s,t = ods
+        dist, sp = nx.single_source_dijkstra(self.graph, source=s, target=t, weight=weight)
+        LBDst = dist * self.od_graph[s][t]['demand']
+        dic = {}
+        [dic.setdefault((sp[i],sp[i + 1]), self.od_graph[s][t]['demand']) for i in range(len(sp) - 1)]
+        #for i in range(len(sp) - 1):
+        #    dic[(sp[i],sp[i + 1])]=self.od_graph[s][t]['demand']
+        return LBDst, dic
+
+    #@timeit
+    def calculate_auxiliary_flows(self, pool):
         self.set_initial_help_flow()
-
-        for edge in self.od_graph.edges():
-            s = edge[0]  # source
-            t = edge[1]  # target
-            sp = nx.shortest_path(self.graph, source=s, target=t, weight='t_k')
-            for i in range(len(sp)-1):
-                u = sp[i]
-                v = sp[i+1]
-                self.graph[u][v]['help_flow'] += self.od_graph[s][t]['demand']
-
-            if self.paths:
-                # add path values to list
-                # no internal flows
-                if s != t:
-                    self.temp_list.append(
-                        [edge, sp, self.od_graph[s][t]['demand'], phi])
-                    self.od_paths[str(edge)][str(sp)] = 0
-
-    def calculate_path_flows(self):
-        self.temp_list.sort(key=lambda x: x[3])
-        # create dict with od flows
-        od_flow = {(e[0], e[1]): e[2]['demand']
-                   for e in self.od_graph.edges(data=True)}
-
-        for od, path, flow, phi in self.temp_list:
-            _flow = sum(self.od_paths[str(od)].values())
-            _od_flow = od_flow[od]
-            _f = flow * phi
-
-            # check if accumulated flow is smaller as target flow
-            if _flow + _f < _od_flow:
-                self.od_paths[str(od)][str(path)] += _f
-
-            # if accumulated flow is larger than target flow, check if this is
-            # a better approximation than the smaller flow
-            elif _flow + _f > _od_flow and \
-                    abs((_flow + _f)-_od_flow) < abs(_od_flow-_flow):
-                self.od_paths[str(od)][str(path)] += _f
-
+        self.LBD = 0
+        ods = [(s,t) for s,t in self.od_graph.edges()]
+        results = pool.map(self.solve_and_assign_sp, ods)
+        self.LBD += sum([lbds for lbds, flows in results])
+        for lbds, flows in results:
+            for a, flow in flows.items():
+                self.graph[a[0]][a[1]]['help_flow'] += flow
+    #@timeit
     def calculate_flows(self, phi):
-        for edge in self.graph.edges():
-            if edge[0] != edge[1]:
-                flow = (1-phi) * self.get_edge_attribute(edge, 'flow') + \
-                    phi * self.get_edge_attribute(edge, 'help_flow')
-                # print('help flow ',phi *self.get_edge_attribute(edge,'help_flow'))
-      #      else:  # internal flow
-                # no self loops of roads
-      #          if (isinstance(edge[0], int) and isinstance(edge[1], int)):
-      #              flow = self.od_graph[edge[0]][edge[1]]['demand']
-            self.set_edge_attribute(edge, 'flow', flow)
+        [self.set_edge_attribute(edge, 'flow', (1 - phi) * self.get_edge_attribute(edge, 'flow') + \
+            phi * self.get_edge_attribute(edge, 'help_flow')) or edge in self.graph.edges() for edge in self.graph.edges()]
 
+
+    def calculate_traveltime_social_edge_exo(self, edge,  fcoeffs, exogenous_G=False):
+         self.set_edge_attribute(edge, 't_k',  self.get_edge_attribute(edge, 't_0') * sum([fcoeffs[i] * \
+                                    ((self.get_edge_attribute(edge, 'flow')+exogenous_G[edge[0]][edge[1]]['flow'])/self.get_edge_attribute(edge, 'capacity'))**(i) for i in range(len(fcoeffs))]) \
+                                    + self.get_edge_attribute(edge, 't_0') *  sum([fcoeffs[i+1]*(i+1)\
+                                    *((self.get_edge_attribute(edge, 'flow')+exogenous_G[edge[0]][edge[1]]['flow'])/self.get_edge_attribute(edge, 'capacity'))**(i) for i in range(len(fcoeffs)-1)]))
+
+    def calculate_traveltime_social_edge(self, edge,  fcoeffs):
+        self.set_edge_attribute(edge, 't_k',  self.get_edge_attribute(edge, 't_0') * sum([fcoeffs[i] * \
+                                ((self.get_edge_attribute(edge, 'flow'))/self.get_edge_attribute(edge, 'capacity'))**(i) for i in range(len(fcoeffs))]) \
+                                + self.get_edge_attribute(edge, 't_0') *  sum([fcoeffs[i+1]*(i+1)\
+                                *((self.get_edge_attribute(edge, 'flow'))/self.get_edge_attribute(edge, 'capacity'))**(i) for i in range(len(fcoeffs)-1)]))
+
+    #@timeit
     def calculate_traveltime_social(self, fcoeffs, exogenous_G=False):
         # TODO: add description
-        for edge in self.graph.edges():
-            capacity = self.get_edge_attribute(edge, 'capacity')
-            flow = self.get_edge_attribute(edge, 'flow')
-            if exogenous_G == False:
-                exog = 0
-            else:
-                exog = exogenous_G[edge[0]][edge[1]]['flow']
+        if exogenous_G == False:
+            [self.calculate_traveltime_social_edge(edge,  fcoeffs) for edge in self.graph.edges()]
+        else:
+            [self.calculate_traveltime_social_edge_exo(edge,  fcoeffs, exogenous_G=exogenous_G) for edge in self.graph.edges()]
 
-            if capacity < self.threshold:
-                traveltime = self.large
-            else:
-                traveltime = self.get_edge_attribute(edge, 't_0') * sum([fcoeffs[i] * ((flow+exog)/capacity)**(i) for i in range(len(fcoeffs))]) \
-                + self.get_edge_attribute(edge, 't_0') *  sum([fcoeffs[i+1]*(i+1) *((flow+exog)/capacity)**(i) for i in range(len(fcoeffs)-1)])
-            self.set_edge_attribute(edge, 't_k', traveltime)
+    #@timeit
+    def calculate_traveltime(self, fcoeffs, exogenous_G=False):
+        if exogenous_G == False:
+            [self.set_edge_attribute(edge, 't_k', self.get_edge_attribute(edge, 't_0') * \
+                    sum([fcoeffs[i] * ((self.get_edge_attribute(edge, 'flow'))/self.get_edge_attribute(edge, 'capacity'))**(i) for i in range(len(fcoeffs))])) \
+                    for edge in self.graph.edges()]
+        else:
+            [self.set_edge_attribute(edge, 't_k', self.get_edge_attribute(edge, 't_0') * \
+                sum([fcoeffs[i] * ((self.get_edge_attribute(edge, 'flow'))+exogenous_G[edge[0]][edge[1]]['flow'] \
+                                   / self.get_edge_attribute(edge,'capacity')) ** (i) for i in range(len(fcoeffs))])) \
+                for edge in self.graph.edges()]
 
-    def calculate_traveltime(self, fcoeffs, social=False, exogenous_G=False):
-        for edge in self.graph.edges():
-            capacity = self.get_edge_attribute(edge, 'capacity')
-            flow = self.get_edge_attribute(edge, 'flow')
-            if exogenous_G == False:
-                exog = 0
-            else:
-                exog = exogenous_G[edge[0]][edge[1]]['flow']
-
-            if capacity < self.threshold:
-                traveltime = self.large
-            else:
-                traveltime = self.get_edge_attribute(edge, 't_0') * sum([fcoeffs[i] * ((flow+exog)/capacity)**(i) for i in range(len(fcoeffs))])
-
-            self.set_edge_attribute(edge, 't_k', traveltime)
-
+    #@timeit
     def stopping_criteria(self):
-        t_k_list = [value for key, value in nx.get_edge_attributes(
-            self.graph, 't_k').items()]
-        t_h_list = [value for key, value in nx.get_edge_attributes(
-            self.graph, 't_h').items()]
-        t_d_list = list(np.abs(np.array(t_k_list) - np.array(t_h_list)))
-        return all(i <= self.threshold for i in t_d_list)
+        TT = self.calculate_total_travel_time()
+        self.RG = abs((TT-self.LBD)/self.LBD)
+        if self.RG <= self.threshold:
+            return True
+        else:
+            return  False
 
     def check_network_connections(self):
         graph = self.graph.copy()
-        for edge in graph.edges():
-            if self.get_edge_attribute(edge, 'capacity') == 0:
-                graph.remove_edge(edge[0], edge[1])
-
+        [graph.remove_edge(edge[0], edge[1]) for edge in graph.edges() if self.get_edge_attribute(edge, 'capacity') == 0]
         cut_links = []
-        for edge in list(self.od_graph.edges()):
-            s = edge[0]  # source
-            t = edge[1]  # target
+        for s,t in list(self.od_graph.edges()):
             if not nx.has_path(graph, s, t):
                 self.lost_trips[(s, t)] = self.od_graph[s][t]['demand']
                 self.od_graph.remove_edge(s, t)
-
                 cut_value, partition = nx.minimum_cut(self.graph, s, t)
                 reachable, non_reachable = partition
-
                 cutset = set()
-                for u, nbrs in ((n, self.graph[n]) for n in reachable):
-                    cutset.update((u, v) for v in nbrs if v in non_reachable)
+                [cutset.update((u, v) for v in nbrs if v in non_reachable) for u, nbrs in ((n, self.graph[n]) for n in reachable)]
                 cut_links.extend(list(cutset))
+        [self.cut_links.append(edge) for edge in list(set(cut_links)) if self.graph[edge[0]][edge[1]]['capacity'] == 0]
 
-        for edge in list(set(cut_links)):
-            if self.graph[edge[0]][edge[1]]['capacity'] == 0:
-                self.cut_links.append(edge)
+    def calculate_total_travel_time(self):
+        return sum([self.get_edge_attribute(edge, 't_k')*self.get_edge_attribute(edge, 'flow') for edge in self.graph.edges()])
+
+    #@timeit
+    def calculate_phi(self, bisection_n=10, exogenous_G=False):
+        l = 1/2
+        ub = 1
+        lb = 0
+        for n in range(bisection_n): #Solve issue with exogenous
+            dx1dl = sum(get_travel_time(x=l*self.get_edge_attribute(edge, 'help_flow')+(1-l)*self.get_edge_attribute(edge, 'flow'),\
+                                    m=self.get_edge_attribute(edge, 'capacity'),\
+                                    t0=self.get_edge_attribute(edge, 't_0'),
+                                    fcoeffs=self.fcoeffs) \
+                    * (self.get_edge_attribute(edge, 'help_flow') - self.get_edge_attribute(edge, 'flow')) \
+                    for edge in self.graph.edges())
+            if dx1dl>0:
+                ub = l
+            else:
+                lb = l
+            l = (ub - lb) / 2
+        return l
+
+    #@timeit
+    def calculate_phi_social(self, bisection_n=10, exogenous_G=False):
+        l = 1/2
+        ub = 1
+        lb = 0
+        for n in range(bisection_n): #Solve issue with exogenous
+            dx1dl = sum(get_travel_time_social(x=l*self.get_edge_attribute(edge, 'help_flow')+(1-l)*self.get_edge_attribute(edge, 'flow'),\
+                                    m=self.get_edge_attribute(edge, 'capacity'),\
+                                    t0=self.get_edge_attribute(edge, 't_0'),
+                                    fcoeffs=self.fcoeffs) \
+                    * (self.get_edge_attribute(edge, 'help_flow') - self.get_edge_attribute(edge, 'flow')) \
+                    for edge in self.graph.edges())
+            if dx1dl>0:
+                ub = l
+            else:
+                lb = l
+            l = (ub - lb) / 2
+
+        return l
+
 
     def run(self, fcoeffs=[1,0,0,0,0.15,0], build_t0=False, exogenous_G=False):
+        pool = mp.Pool(mp.cpu_count()-1)
         # assign od matrix to od graph (if matrix is given)
         if self.od_matrix is not None:
             self.set_od_matix(self.od_matrix)
-        
         # calculate traveltime at t=0
         if build_t0:
             self.calculate_initial_traveltime()
-
         # set traveltime equal to initial traveltime
         self.set_initial_traveltimes()
         self.assert_t0_exists()
-         
         # set initial flow = 0
         self.set_initial_flow()
-
         # set initial help flow = 0
         self.set_initial_help_flow()
-
         # check network if every source and target can be reached
         self.check_network_connections()
-
+        phi = 1
+        self.RG=99
         for i in range(1, self.n_iter_tm):
-            phi = 1/i
             # calculate auxiliary flows
-            self.calculate_auxiliary_flows(phi)
-
+            self.calculate_auxiliary_flows(pool)
             # calculating the flow using auxiliary flow
             self.calculate_flows(phi)
-
             # save old traveltimes
             self.set_help_traveltime()
-
             # calculate new traveltime
             self.calculate_traveltime(fcoeffs=fcoeffs, exogenous_G=exogenous_G)
-
+            #update phi
+            phi = self.calculate_phi()
             # stopping criteria
+            print("i: " + str(i) + '\t RG: ' + str(self.RG))
             if self.stopping_criteria():
+                #print("i: " + str(i) + '\t RG: ' + str(self.RG))
+                pool.close()
                 break
-        #print('Number of iterations needed: {}/{}'.format(i+1, self.n_iter_tm))
-        # extract the path flows
-        if self.paths:
-            self.calculate_path_flows()
+        pool.close()
 
     def run_social(self, fcoeffs=[1, 0, 0, 0, 0.15, 0], build_t0=False, exogenous_G=False):
+        pool = mp.Pool(mp.cpu_count()-1)
         # assign od matrix to od graph (if matrix is given)
         if self.od_matrix is not None:
             self.set_od_matix(self.od_matrix)
-
         # calculate traveltime at t=0
         if build_t0:
             self.calculate_initial_traveltime()
-
         # set traveltime equal to initial traveltime
         self.set_initial_traveltimes()
         self.assert_t0_exists()
-
         # set initial flow = 0
         self.set_initial_flow()
-
         # set initial help flow = 0
         self.set_initial_help_flow()
-
         # check network if every source and target can be reached
         self.check_network_connections()
-
+        phi = 1
+        self.RG = 99
         for i in range(1, self.n_iter_tm):
-            phi = 1 / i
             # calculate auxiliary flows
-            self.calculate_auxiliary_flows(phi)
-
+            self.calculate_auxiliary_flows(pool)
             # calculating the flow using auxiliary flow
             self.calculate_flows(phi)
-
             # save old traveltimes
             self.set_help_traveltime()
-
             # calculate new traveltime
             self.calculate_traveltime_social(fcoeffs=fcoeffs, exogenous_G=exogenous_G)
-
+            # update phi
+            phi = self.calculate_phi()
             # stopping criteria
+            print("i: " + str(i-1) + '\t RG: ' + str(self.RG))
             if self.stopping_criteria():
+                print("i: " + str(i) + '\t RG: ' + str(self.RG))
+                pool.close()
                 break
-        # print('Number of iterations needed: {}/{}'.format(i+1, self.n_iter_tm))
-        # extract the path flows
-        if self.paths:
-            self.calculate_path_flows()
+        pool.close()
+
 
 
     def get_traveltime(self):
@@ -379,51 +371,6 @@ class TrafficAssignment(object):
 
     def get_od_path_flows(self):
         return self.od_paths
-
-    def get_paths(self):
-        # initialize variables
-        P = []
-        _weight = {}
-        _volume = {}
-        _fft = {}
-        # prepare help variables
-        for u, v, a in self.graph.edges(data=True):
-            if a['type'] != 'Misc' and a['capacity'] > 0:
-                _weight[(u, v)] = a['t_k']
-                _fft[(u, v)] = a['t_0']
-                _volume[(u, v)] = a['flow']
-
-        for od, paths in self.od_paths.items():
-            for path, flow in paths.items():
-                if flow > 0:
-                    _p = ast.literal_eval(path)
-                    o = _p[0]
-                    d = _p[-1]
-                    del _p[0]
-                    del _p[-1]
-
-                    _w = 0
-                    _c = 0
-                    _f = 0
-
-                    for i in range(len(_p)-1):
-                        u = _p[i]
-                        v = _p[i+1]
-                        _w += _weight[(u, v)]
-                        _c += _weight[(u, v)] * flow / _volume[(u, v)]
-                        _f += _fft[(u, v)]
-
-                    p = {}
-                    p['flow'] = flow
-                    p['od'] = (o, d)
-                    p['o'] = o
-                    p['d'] = d
-                    p['path'] = _p
-                    p['cost'] = _c
-                    p['weight'] = _w
-                    p['fft'] = _f
-                    P.append(p)
-        return P
 
     def get_car_hours(self):
         car_hours = []
@@ -474,6 +421,15 @@ class TrafficAssignment(object):
     def assert_t0_exists(self):
         for edge in self.graph.edges():
             assert (self.get_edge_attribute(edge,'t_0') > 0) ,"Edge: "+str(edge)+" has t_0 = 0 or t_0 not exists!!"
+
+
+
+def get_travel_time(x, m, t0,  fcoeffs, exo=0):
+        return t0 *sum(fcoeffs[i]*(x+exo/m)**i for i in range(len(fcoeffs)))
+
+def get_travel_time_social(x, m, t0, fcoeffs, exo=0):
+    return t0 *sum(fcoeffs[i]*(x+exo/m)**i for i in range(len(fcoeffs))) + t0 * sum(fcoeffs[i+1]*(i+1)*(x+exo/m)**i for i in range(len(fcoeffs)-1))
+
 
 def get_dxdb(TAP, delta=0.05, divide=1, num_cores = False):
     """

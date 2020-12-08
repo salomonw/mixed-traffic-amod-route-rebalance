@@ -6,7 +6,8 @@ import subprocess
 import numpy as np
 import time
 from functools import update_wrapper
-import gzip 
+import gzip
+import sys
 
 proto = pickle.HIGHEST_PROTOCOL
 
@@ -174,6 +175,26 @@ def dict2json(dict_, fname):
     with open(fname, 'w') as fp:
         json.dump(dict_, fp)
 
+
+def json2dict(fname):
+    """
+    reads a json dictionary from a file
+
+    Parameters
+    ----------
+    dict_: a dictionary we aim to save
+    fname: name of the output file
+
+    Returns
+    -------
+    a csv file
+
+    """
+    with open(fname, 'r') as f:
+        dict = json.load(f)
+    return dict
+
+
 def shell(command, printOut=True):
     """
     Run shell commands in Linux, decide if printing or not the output in console
@@ -297,6 +318,26 @@ def timeit(f):
         bt = time.time()
         r = f(*args, **kwargs)
         et = time.time()
-       # print("time spent on {0}: {1:.2f}s".format(f.__name__, et - bt))
+        print("time spent on {0}: {1:.2f}s".format(f.__name__, et - bt))
         return r
     return new_f
+
+
+
+class progressBar:
+    def __init__(self, toolbar_width):
+        self.toolbar_width = toolbar_width
+
+    def set(self):
+        # setup toolbar
+        print("\nProgress:")
+        sys.stdout.write("[%s]" % (" " * self.toolbar_width))
+        sys.stdout.flush()
+        sys.stdout.write("\b" * (self.toolbar_width+1)) # return to start of line, after '['
+
+    def tic(self):
+        sys.stdout.write("-")
+        sys.stdout.flush()
+
+    def finish(slef):
+        sys.stdout.write("]\n")

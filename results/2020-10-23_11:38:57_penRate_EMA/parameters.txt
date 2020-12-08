@@ -1,0 +1,4 @@
+n: 5
+theta_n: 2
+linear: False
+g_multi: 3
