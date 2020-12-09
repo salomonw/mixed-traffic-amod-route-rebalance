@@ -4,8 +4,9 @@
 #$ -N routing_rebalancing
 #$ -j y
 #$ -m bae
-#$ -t 50
-#$ -l h_rt=18:00:00
+#$ -pe omp 32
+#$ -l mem_per_core=10G
+#$ -l h_rt=24:00:00
 
 # Load Modules
 module load python3

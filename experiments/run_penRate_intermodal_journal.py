@@ -58,8 +58,8 @@ def solve_stackelberg_game(par):
     tNet_cavs.build_layer(one_way=True, avg_speed=6,capacity=99999, symb="b", identical_G=False)
     tNet_non_cavs.build_layer(one_way=True, avg_speed=0.0001, capacity=99999, symb="b", identical_G=False)
     # add pedestrian network
-    tNet_cavs.build_layer(one_way=False, avg_speed=3.1, capacity=99999, symb="'", identical_G=False)
-    tNet_non_cavs.build_layer(one_way=False, avg_speed=0.0001, capacity=9999, symb="'", identical_G=False)
+   # tNet_cavs.build_layer(one_way=False, avg_speed=3.1, capacity=99999, symb="'", identical_G=False)
+   # tNet_non_cavs.build_layer(one_way=False, avg_speed=0.0001, capacity=9999, symb="'", identical_G=False)
     # add subway for nyc
     if netname == 'NYC':
         layer = tnet.readNetFile(netFile='data/net/NYC/NYC_M_Subway_net.txt')
@@ -167,7 +167,7 @@ def penRate(netname, dir_out, rebalancing=True, linear=True, n=5, theta_n=3, dem
     bikeFlow = []
     subwayFlow = []
     if parallel:
-        pool = mp.Pool(min(50, mp.cpu_count()))
+        pool = mp.Pool(min(6, mp.cpu_count()))
         pars = [(netname, dir_out, penetration_rate, rebalancing, linear, n, theta_n, demand_multiplier, n_iter) for penetration_rate in j]
         results = pool.map(solve_stackelberg_game, pars)
     else:
@@ -278,9 +278,9 @@ n_iter = 5
 theta_n = 3
 linear = False
 parallel = True
-for demand_multiplier in [1]:#,2,4]:
-    for netname in ['EMA_mid']:
-    #for netname in ['NYC']:
+for demand_multiplier in [4]:
+    #for netname in ['EMA_mid']:
+    for netname in ['NYC']:
         if netname == "NYC":
             parallel = True
         j = [0, 0.1, 0.2, 0.3 , 0.4, 0.5 ,0.6, 0.7 , 0.8 , 0.9, 1]
