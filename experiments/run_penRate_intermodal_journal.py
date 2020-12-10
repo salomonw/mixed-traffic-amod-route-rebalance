@@ -70,7 +70,7 @@ def solve_stackelberg_game(par):
   
     it = []
     for i in range(iterations):
-        if i <= 0:
+        if i <=0:
             cars.solve_bush_CARSn(tnet=tNet_cavs, fcoeffs=fcoeffs, n=n, exogenous_G=False,
                                   rebalancing=rebalancing, bush=True, linear=linear,
                                   theta_n=theta_n, theta=theta_cavs, a=a_cavs, od_flows_flag=False)
@@ -90,7 +90,7 @@ def solve_stackelberg_game(par):
                                   rebalancing=False, bush=True, userCentric=True,
                                   exogenous_G=tNet_cavs.G_supergraph, linear=linear,
                                   theta_n=theta_n, theta=theta_non_cavs, a=a_non_cavs, od_flows_flag=False)
-       #cars.G2supergraph(tNet_non_cavs)
+        #cars.G2supergraph(tNet_non_cavs)
         #cars.supergraph2G(tNet_non_cavs)
 
         cavscost_ = cars.get_totalTravelTime_without_Rebalancing(tNet_cavs, G_exogenous=tNet_non_cavs.G_supergraph)
