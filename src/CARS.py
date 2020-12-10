@@ -366,7 +366,6 @@ def solve_CARSn(tnet, fcoeffs, n=3, exogenous_G=False, rebalancing=True, linear=
     tnet.cars_obj = obj.getValue()
     od_flows = get_OD_result_flows(m, tnet)
     return tnet, m.Runtime, od_flows
-
 '''
 
 @timeit
@@ -375,8 +374,9 @@ def solve_bush_CARSn(tnet, fcoeffs, n=3, exogenous_G=False, rebalancing=True, li
     fc = fcoeffs.copy()
     if (theta==False) or (a==False):
         if userCentric:
+            fc=fc
             #fc.insert(0,0)
-            fc = UC_fcoeffs(fc)
+            #fc = UC_fcoeffs(fc)
             #print(fc)
         #else:
             #fc.insert(0, 0)
