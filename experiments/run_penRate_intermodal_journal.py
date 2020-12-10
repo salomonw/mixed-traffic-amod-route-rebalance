@@ -11,7 +11,7 @@ import experiments.build_NYC_subway_net as nyc
 from datetime import datetime
 import  pandas as pd
 import multiprocessing as mp
-
+import sys
 
 #rc('font',**{'family':'sans-serif','sans-serif':['Helvetica'], 'size': 13})
 rc('text', usetex=False)
@@ -55,13 +55,15 @@ def solve_stackelberg_game(par):
 
     #'''
     # add biking network
-    tNet_cavs.build_layer(one_way=True, avg_speed=6,capacity=99999, symb="b", identical_G=False)
-    tNet_non_cavs.build_layer(one_way=True, avg_speed=0.0001, capacity=99999, symb="b", identical_G=False)
+    if "B" in str(sys.argv[3]):
+        tNet_cavs.build_layer(one_way=True, avg_speed=6,capacity=99999, symb="b", identical_G=False)
+        tNet_non_cavs.build_layer(one_way=True, avg_speed=0.0001, capacity=99999, symb="b", identical_G=False)
     # add pedestrian network
-    #tNet_cavs.build_layer(one_way=False, avg_speed=3.1, capacity=99999, symb="'", identical_G=False)
-    #tNet_non_cavs.build_layer(one_way=False, avg_speed=0.0001, capacity=9999, symb="'", identical_G=False)
+    if "P" in str(sys.argv[3]):
+        tNet_cavs.build_layer(one_way=False, avg_speed=3.1, capacity=99999, symb="'", identical_G=False)
+        tNet_non_cavs.build_layer(one_way=False, avg_speed=0.0001, capacity=9999, symb="'", identical_G=False)
     # add subway for nyc
-    if netname == 'NYC':
+    if netname == 'NYC' and "S" in str(sys.argv[3]):
         layer = tnet.readNetFile(netFile='data/net/NYC/NYC_M_Subway_net.txt')
         tNet_cavs.add_layer(layer=layer, layer_symb='s')
         tNet_non_cavs.add_layer(layer=layer, layer_symb='s', speed=0.001)
@@ -278,8 +280,8 @@ n_iter = 5
 theta_n = 3
 linear = False
 parallel = True
-for demand_multiplier in [1]:
-    for netname in ['EMA_mid']:
+for demand_multiplier in [float(sys.argv[2])]:
+    for netname in [str(sys.argv[1])]:
     #for netname in ['NYC']:
         if netname == "NYC":
             parallel = True

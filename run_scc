@@ -1,16 +1,15 @@
 #!/bin/bash -l
 
 #$ -P noc-lab
-#$ -N routing_rebalancing
+#$ -N RR
 #$ -j y
 #$ -m bae
 #$ -pe omp 16
-#$ -l mem_per_core=10G
-#$ -l h_rt=24:00:00
+#$ -l h_rt=00:30:00
 
 # Load Modules
 module load python3
-module load gurobi/9.0.0
+module load gurobi
 
 # Run program
-python3 -m experiments.run_penRate_intermodal_journal
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 A
