@@ -374,9 +374,9 @@ def solve_bush_CARSn(tnet, fcoeffs, n=3, exogenous_G=False, rebalancing=True, li
     fc = fcoeffs.copy()
     if (theta==False) or (a==False):
         if userCentric:
-            fc=fc
+            #fc=fc
             #fc.insert(0,0)
-            #fc = UC_fcoeffs(fc)
+            fc = UC_fcoeffs(fc)
             #print(fc)
         #else:
             #fc.insert(0, 0)
