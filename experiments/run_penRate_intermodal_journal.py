@@ -67,24 +67,7 @@ def solve_stackelberg_game(par):
         layer = tnet.readNetFile(netFile='data/net/NYC/NYC_M_Subway_net.txt')
         tNet_cavs.add_layer(layer=layer, layer_symb='s')
         tNet_non_cavs.add_layer(layer=layer, layer_symb='s', speed=0.001)
-    '''
-    if netname == 'NYC':
-        dir_ = 'data/net/NYC_M/'
-        symbs = []
-        for filename in os.listdir(dir_):
-            if filename.endswith(".txt") and not filename.endswith('Road_net.txt') and not filename.endswith('Walk_net.txt'):
-                netFile = os.path.join(dir_, filename)
-                layer = tnet.readNetFile(netFile=netFile)
-                layer_symb=filename.split('_')[3]
-                symbs.append(layer_symb)
-                #tNet.build_layer(self, one_way=True, avg_speed=3.1 ,capacity=9999999, symb=layer_symb, identical_G=False)
-                tNet_cavs.add_layer(layer=layer, layer_symb=layer_symb, capacity=9999999)
-                tNet_non_cavs.add_layer(layer=layer, layer_symb=layer_symb, speed=0.001)
-                #tNet_cavs.build_layer(one_way=False, avg_speed=3.1, capacity=999999, symb="'", identical_G=False)
-            else:
-                continue
-    '''
-
+  
     it = []
     for i in range(iterations):
         if i <= 0:
@@ -156,7 +139,7 @@ def solve_stackelberg_game(par):
     print(penetration_rate)
     return cavscost_, noncavscost_, totalcost_, cavsFlow, nonCavsFlow, pedestrianFlow, rebalancingFlow, bikeFlow, subwayFlow
 
-def penRate(netname, dir_out, rebalancing=True, linear=True, n=5, theta_n=3, demand_multiplier=1,n_iter = 5,  parallel=True):
+def penRate(netname, dir_out, rebalancing=True, linear=False, n=5, theta_n=3, demand_multiplier=1,n_iter = 5,  parallel=True):
 
     j  = [0.01, 0.1, 0.2, 0.3 , 0.4, 0.5 ,0.6, 0.7 , 0.8 , 0.9, 0.99]
     cavsCost = []
@@ -265,32 +248,25 @@ def save_results(results, dir_out):
 
 # Inputs
 
-#netname = 'NYC_Uber_small_1'
-#netname = 'Braess1'
-#netname = 'EMA_mid' #  |||  g=1 --> theta_n = 2.5 |||   |||  g=2 --> theta_n =3 |||
-#netname = 'EMA'
-netname = 'NYC'#  |||  g=1 --> theta_n = 1.5 |||   |||  g=2 --> theta_n =3 |||
-#netname = 'Anaheim'
-#netname = 'Sioux Falls'
-
+netname = str(sys.argv[1])
+demand_multiplier = float(sys.argv[2])
+modes = str(sys.argv[3])
 rebalancing = True
 n = 5
 n_iter = 5
-#demand_multiplier = 2
 theta_n = 3
 linear = False
 parallel = True
-for demand_multiplier in [float(sys.argv[2])]:
-    for netname in [str(sys.argv[1])]:
-    #for netname in ['NYC']:
-        if netname == "NYC":
-            parallel = True
-        j = [0, 0.1, 0.2, 0.3 , 0.4, 0.5 ,0.6, 0.7 , 0.8 , 0.9, 1]
-        alg = 'CARS'+str(n)
-        tstamp = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-        dir_out = tstamp + '_' + 'penRate_'+netname
-        result = penRate(netname,dir_out=dir_out,rebalancing=rebalancing, n=n, theta_n=theta_n, linear=linear,  demand_multiplier=demand_multiplier, n_iter=n_iter, parallel=parallel)
-        save_results(result, dir_out)
-        plot_penRate(result, dir_out)
-        with open('results/' + dir_out + "/parameters.txt", "w") as text_file:
+
+if netname == "NYC":
+    parallel = True
+j = [0, 0.1, 0.2, 0.3 , 0.4, 0.5 ,0.6, 0.7 , 0.8 , 0.9, 1]
+alg = 'CARS'+str(n)
+tstamp = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+dir_out = tstamp + '_' + 'penRate_'+netname+"_"+str(demand_multiplier)+modes
+result = penRate(netname,dir_out=dir_out,rebalancing=rebalancing, n=n, theta_n=theta_n, linear=linear,  demand_multiplier=demand_multiplier, n_iter=n_iter, parallel=parallel)
+save_results(result, dir_out)
+plot_penRate(result, dir_out)
+plt.show()
+with open('results/' + dir_out + "/parameters.txt", "w") as text_file:
             print("n: "+str(n)+"\ntheta_n: "+str(theta_n)+"\nlinear: "+str(linear)+"\ng_multi: "+str(demand_multiplier), file=text_file)
