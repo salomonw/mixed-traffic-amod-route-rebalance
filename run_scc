@@ -4,12 +4,13 @@
 #$ -N RR
 #$ -j y
 #$ -m bae
-#$ -pe omp 16
-#$ -l h_rt=00:30:00
+#$ -pe omp 32
+#$ -l h_rt=11:50:00
 
 # Load Modules
 module load python3
 module load gurobi
 
 # Run program
-python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 A
+python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASB
+
