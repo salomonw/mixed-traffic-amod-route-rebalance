@@ -56,7 +56,7 @@ def solve_stackelberg_game(par):
     #'''
     # add biking network
     tNet_cavs.build_layer(one_way=True, avg_speed=6,capacity=99999, symb="b", identical_G=False)
-    tNet_non_cavas.build_layer(one_way=True, avg_speed=0.0001, capacity=99999, symb="b", identical_G=False)
+    tNet_non_cavs.build_layer(one_way=True, avg_speed=0.0001, capacity=99999, symb="b", identical_G=False)
     # add pedestrian network
     #tNet_cavs.build_layer(one_way=False, avg_speed=3.1, capacity=99999, symb="'", identical_G=False)
     #tNet_non_cavs.build_layer(one_way=False, avg_speed=0.0001, capacity=9999, symb="'", identical_G=False)
@@ -278,9 +278,9 @@ n_iter = 5
 theta_n = 3
 linear = False
 parallel = True
-for demand_multiplier in [4]:
-    #for netname in ['EMA_mid']:
-    for netname in ['NYC']:
+for demand_multiplier in [1]:
+    for netname in ['EMA_mid']:
+    #for netname in ['NYC']:
         if netname == "NYC":
             parallel = True
         j = [0, 0.1, 0.2, 0.3 , 0.4, 0.5 ,0.6, 0.7 , 0.8 , 0.9, 1]

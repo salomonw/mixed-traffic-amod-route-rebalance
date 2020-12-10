@@ -4,7 +4,7 @@
 #$ -N routing_rebalancing
 #$ -j y
 #$ -m bae
-#$ -pe omp 32
+#$ -pe omp 16
 #$ -l mem_per_core=10G
 #$ -l h_rt=24:00:00
 
