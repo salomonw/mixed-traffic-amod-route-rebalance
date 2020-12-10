@@ -73,12 +73,12 @@ def solve_stackelberg_game(par):
         if i <= 0:
             cars.solve_bush_CARSn(tnet=tNet_non_cavs, fcoeffs=fcoeffs, n=n, exogenous_G=False,
 	                          rebalancing=rebalancing, bush=True, linear=linear,
-				  theta_n=theta_n, theta=theta_non_cavs, a=a_cavs, od_flows_flag=False, 
+				  theta_n=theta_n, theta=theta_non_cavs, a=a_non_cavs, od_flows_flag=False, 
 				  userCentric=True)
         else:
             cars.solve_bush_CARSn(tnet=tNet_non_cavs, fcoeffs=fcoeffs, n=n, exogenous_G=tNet_cavs.G_supergraph, 
 				  rebalancing=rebalancing, bush=True, linear=linear, 
-				  theta_n=theta_n, theta=theta_non_cavs, a=a_cavs, od_flows_flag=False, 
+				  theta_n=theta_n, theta=theta_non_cavs, a=a_non_cavs, od_flows_flag=False, 
 				  userCentric=True)
         if i <=-10:
             cars.solve_bush_CARSn(tnet=tNet_cavs, fcoeffs=fcoeffs, n=n, exogenous_G=False,
@@ -257,7 +257,6 @@ def save_results(results, dir_out):
 
 
 # Inputs
-
 netname = str(sys.argv[1])
 demand_multiplier = float(sys.argv[2])
 modes = str(sys.argv[3])
@@ -274,7 +273,16 @@ j = [0, 0.1, 0.2, 0.3 , 0.4, 0.5 ,0.6, 0.7 , 0.8 , 0.9, 1]
 alg = 'CARS'+str(n)
 tstamp = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 dir_out = tstamp + '_' + 'penRate_'+netname+"_"+str(demand_multiplier)+modes
-result = penRate(netname,dir_out=dir_out,rebalancing=rebalancing, n=n, theta_n=theta_n, linear=linear,  demand_multiplier=demand_multiplier, n_iter=n_iter, parallel=parallel)
+result = penRate(netname,
+		dir_out=dir_out,
+		rebalancing=rebalancing, 
+		n=n, 
+		theta_n=theta_n, 
+		linear=linear,
+		demand_multiplier=demand_multiplier, 
+		n_iter=n_iter, 
+		parallel=parallel
+		)
 save_results(result, dir_out)
 plot_penRate(result, dir_out)
 #plt.show()
