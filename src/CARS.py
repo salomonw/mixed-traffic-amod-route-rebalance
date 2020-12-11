@@ -242,9 +242,9 @@ def get_obj_CARSn(m, tnet, xu,  theta, a, exogenous_G, linear=False):#, userCent
     else:
         obj = quicksum(Vt * tnet.G_supergraph[i][j]['t_0'] * xu[(i, j)] for i,j in tnet.G_supergraph.edges())
         obj = obj+ quicksum(\
-                quicksum( Vt * tnet.G_supergraph[i][j]['t_0'] * a[l]/tnet.G_supergraph[i][j]['capacity'] *  m.getVarByName('e^'+str(l)+'_'+str(i)+'_'+str(j)) * (0+quicksum(((theta[k + 1] - theta[k])*tnet.G_supergraph[i][j]['capacity']) for k in range(0,l-1))) \
+                quicksum( Vt * tnet.G_supergraph[i][j]['t_0'] * a[l]/tnet.G_supergraph[i][j]['capacity'] *  m.getVarByName('e^'+str(l)+'_'+str(i)+'_'+str(j)) * (quicksum(((theta[k + 1] - theta[k])*tnet.G_supergraph[i][j]['capacity']) for k in range(0,l-1))) \
                 + Vt * tnet.G_supergraph[i][j]['t_0'] * a[l]/tnet.G_supergraph[i][j]['capacity'] * m.getVarByName('e^'+str(l)+'_'+str(i)+'_'+str(j)) * ( m.getVarByName('e^'+str(l)+'_'+str(i)+'_'+str(j))) \
-                + Vt * tnet.G_supergraph[i][j]['t_0'] * a[l]/tnet.G_supergraph[i][j]['capacity'] *(theta[l+1] - theta[l])*tnet.G_supergraph[i][j]['capacity']*(0+quicksum(m.getVarByName('e^'+str(k)+'_'+str(i)+'_'+str(j)) for k in range(l, len(theta)-1))) \
+                + Vt * tnet.G_supergraph[i][j]['t_0'] * a[l]/tnet.G_supergraph[i][j]['capacity'] *(theta[l+1] - theta[l])*tnet.G_supergraph[i][j]['capacity']*(quicksum(m.getVarByName('e^'+str(k)+'_'+str(i)+'_'+str(j)) for k in range(l, len(theta)-1))) \
                 - Vt * tnet.G_supergraph[i][j]['t_0'] * a[l]/tnet.G_supergraph[i][j]['capacity'] * m.getVarByName('e^'+str(l)+'_'+str(i)+'_'+str(j)) * exogenous_G[i][j]['flow'] \
                 for l in range(len(theta)-1)) \
                 + (Vd * tnet.G_supergraph[i][j]['t_0'] + Ve * tnet.G_supergraph[i][j]['e']) * m.getVarByName('x^R' + str(i) + '_' + str(j))\
@@ -420,10 +420,9 @@ def solve_bush_CARSn(tnet, fcoeffs, n=3, exogenous_G=False, rebalancing=True, li
         [m.addVar(lb=0, ub=0, name='x^R' + str(i) + '_' + str(j)) for i, j in tnet.G.edges()]
 
     [m.addVar(name='e^'+str(l)+'_'+str(i)+'_'+str(j), \
-              lb=0 )\
-
+              lb=0)# ub=theta[l+1]-theta[l]) \
                for i,j in tnet.G.edges() for l in range(n)]
-
+    #[m.addVar(name='e^'+str(n+1)+'_'+str(i)+'_'+str(j), lb=0) for i,j in tnet.G.edges()]
     m.update()
 
     if bush==True:
