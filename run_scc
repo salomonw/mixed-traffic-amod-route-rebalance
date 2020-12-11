@@ -4,25 +4,25 @@
 #$ -N RR
 #$ -j y
 #$ -m bae
-#$ -pe omp 36
-#$ -l h_rt=20:50:00
+#$ -pe omp 24
+#$ -l h_rt=11:50:00
 
 # Load Modules
 module load python3
 module load gurobi
 
 # Run program
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 A
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 AP
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 APB
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 A
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 AP
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 APB
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 A
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 AP
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 A
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 AP
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 APB
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 A
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 AP
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 APB
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 A
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 AP
 #python3 -m experiments.run_penRate_intermodal_journal EMA_mid 4 APB
 
-python3 -m experiments.run_penRate_intermodal_journal NYC 2 ASB
+#python3 -m experiments.run_penRate_intermodal_journal NYC 2 ASB
 
