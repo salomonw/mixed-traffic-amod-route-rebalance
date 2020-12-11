@@ -5,7 +5,7 @@ import numpy as np
 import random as random
 
 class pwapprox:
-    def __init__(self, x,y, k=2):
+    def __init__(self,x,y, k=2):
         self.x = x
         self.y = y
         self.k = k
@@ -136,6 +136,18 @@ class pwapprox:
 
     def f_hat(self, x):
         return max([self.y_hat[i] + self.g_hat[i]*(x-self.x[i]) for i in range(len(self.x))])
+
+    def fit_convex_with_theta(self, theta):
+        n=0
+        a = []
+        for i in range(len(theta)-1):
+            x = [j for j in self.x if j<theta[i+1] and j>=theta[i]]
+            n_0 = n 
+            n += len(x)
+            y = self.y[n_0:n]
+            ai , bi, r_value, p_value, std_err = stats.linregress(x,y)
+            a.append(ai)
+        self.a = a
 
     def plot_fit(self, ax):
         ax.scatter(self.x, self.y, marker='.')

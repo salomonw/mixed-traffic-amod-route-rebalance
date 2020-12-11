@@ -30,11 +30,14 @@ def read_net(net_name):
         tNet = tnet.tNet(netFile=netFile, gFile=gFile, fcoeffs=fcoeffs)
     return tNet, fcoeffs
 
-def get_pwfunction(fcoeffs, n, theta_n,  userCentric=False):
+def get_pwfunction(fcoeffs, n, theta_n, theta=False, userCentric=False):
     fc = fcoeffs.copy()
     if userCentric:
         fc = cars.UC_fcoeffs(fc)
-    theta, a, rms  = cars.get_approx_fun(fcoeffs=fc, nlines=n, range_=[0,theta_n], plot=False)
+    if theta == False:
+        theta, a, rms  = cars.get_approx_fun(fcoeffs=fc, nlines=n, range_=[0,theta_n], plot=False)
+    else:
+        theta, a, rms  = cars.get_approx_fun(fcoeffs=fc, nlines=n, range_=[0,theta_n], theta=theta, plot=False)
     return theta, a
 
 def solve_stackelberg_game(par):
@@ -51,7 +54,7 @@ def solve_stackelberg_game(par):
     tNet_non_cavs.build_supergraph(identical_G=True)
 
     theta_cavs, a_cavs = get_pwfunction(fcoeffs, n, theta_n, userCentric=False)
-    theta_non_cavs, a_non_cavs = get_pwfunction(fcoeffs, n, theta_n, userCentric=True)
+    theta_non_cavs, a_non_cavs = get_pwfunction(fcoeffs, n, theta_n, theta=theta_cavs, userCentric=True)
 
     #'''
     # add biking network
@@ -265,7 +268,7 @@ netname = str(sys.argv[1])
 demand_multiplier = float(sys.argv[2])
 modes = str(sys.argv[3])
 rebalancing = True
-n = 7
+n = 3
 n_iter = 5
 theta_n = 2.5
 linear = False

@@ -31,19 +31,27 @@ def eval_pw(a, b, theta, x):
 
 
 
-def get_approx_fun(fcoeffs, range_=[0,2], nlines=3, plot=False):
+def get_approx_fun(fcoeffs, range_=[0,2], nlines=3, theta=False, plot=False):
     # Generate data
     x = [i  for i in list(np.linspace(range_[0], range_[1], 100))]
     y = [eval_travel_time(i, fcoeffs) for i in x]
-    pws = pw.pwapprox(x, y, k=nlines)
-    pws.fit_convex_boyd(N=30, L=30)
-    rms = min(pws.rms_vec)
-    i = pws.rms_vec.index(rms)
-    a = pws.a_list[i]
-    b = pws.b_list[i]
-    theta = pws.thetas[i]
-    theta.insert(0,0)
-    theta.append(range_[1])
+    if theta==False:
+        pws = pw.pwapprox(x, y, k=nlines)
+        pws.fit_convex_boyd(N=30, L=30)
+        rms = min(pws.rms_vec)
+        i = pws.rms_vec.index(rms)
+        a = pws.a_list[i]
+        b = pws.b_list[i]
+        theta = pws.thetas[i]
+        theta.insert(0,0)
+        theta.append(range_[1])
+    else:
+        pws = pw.pwapprox(x, y, k=nlines)
+        pws.fit_convex_with_theta(theta)
+        theta = theta
+        a = pws.a
+        rms = 0
+
     if plot == True:
         fig, ax = plt.subplots(2)
         ax[0].plot(x, y , label = 'Original', color='k')
