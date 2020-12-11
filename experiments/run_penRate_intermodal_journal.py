@@ -268,9 +268,9 @@ netname = str(sys.argv[1])
 demand_multiplier = float(sys.argv[2])
 modes = str(sys.argv[3])
 rebalancing = True
-n = 8
+n = 9
 n_iter = 5
-theta_n = 2.5
+theta_n = 3.5
 linear = False
 parallel = True
 
