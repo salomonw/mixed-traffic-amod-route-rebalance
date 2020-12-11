@@ -228,7 +228,7 @@ def get_obj_CARSn(m, tnet, xu,  theta, a, exogenous_G, linear=False):#, userCent
                 - m.getVarByName('e^'+str(l)+'_'+str(i)+'_'+str(j)) * exogenous_G[i][j]['flow'] \
                 ) for l in range(len(theta)-1))  \
                 + (Vd * tnet.G_supergraph[i][j]['t_0'] + Ve * tnet.G_supergraph[i][j]['e']) * m.getVarByName('x^R' + str(i) + '_' + str(j))\
-                for i,j in tnet.G.edges())
+                for i,j in tnet.G_supergraph.edges())
         '''
         obj = quicksum( Vt * tnet.G_supergraph[i][j]['t_0'] * xu[(i, j)] \
                 + quicksum( Vt * tnet.G_supergraph[i][j]['t_0'] * a[l]/tnet.G_supergraph[i][j]['capacity'] *  m.getVarByName('e^'+str(l)+'_'+str(i)+'_'+str(j)) * (quicksum(((theta[k + 1] - theta[k]) * tnet.G_supergraph[i][j]['capacity']) for k in range(l))) \
@@ -248,7 +248,7 @@ def get_obj_CARSn(m, tnet, xu,  theta, a, exogenous_G, linear=False):#, userCent
                 - Vt * tnet.G_supergraph[i][j]['t_0'] * a[l]/tnet.G_supergraph[i][j]['capacity'] * m.getVarByName('e^'+str(l)+'_'+str(i)+'_'+str(j)) * exogenous_G[i][j]['flow'] \
                 for l in range(len(theta)-1)) \
                 + (Vd * tnet.G_supergraph[i][j]['t_0'] + Ve * tnet.G_supergraph[i][j]['e']) * m.getVarByName('x^R' + str(i) + '_' + str(j))\
-                for i,j in tnet.G.edges())
+                for i,j in tnet.G_supergraph.edges())
 
 
         '''
@@ -421,8 +421,8 @@ def solve_bush_CARSn(tnet, fcoeffs, n=3, exogenous_G=False, rebalancing=True, li
 
     [m.addVar(name='e^'+str(l)+'_'+str(i)+'_'+str(j), \
               lb=0 )\
-             # ub=(theta[l+1]-theta[l])*tnet.G[i][j]['capacity']) \
-               for i,j in tnet.G.edges() for l in range(n)]
+
+               for i,j in tnet.G_supergraph.edges() for l in range(n)]
 
     m.update()
 
