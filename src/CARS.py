@@ -176,8 +176,8 @@ def eval_obj_funct(tnet, G_exogenous):
 def set_CARS_par(tnet):
     # Set obj func parameters
     Vt = 24.4
-    Vd = 0.286
-    Ve = 0.247
+    Vd = 0#0.286
+    Ve = 0#0.247
     # Set the electricity constant
     ro = 1.25
     Af = 0.4
