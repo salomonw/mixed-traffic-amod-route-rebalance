@@ -267,7 +267,7 @@ def save_results(results, dir_out):
 netname = str(sys.argv[1])
 demand_multiplier = float(sys.argv[2])
 modes = str(sys.argv[3])
-rebalancing = True
+rebalancing = sys.argv[4]
 n = 10
 n_iter = 3
 theta_n = 5
@@ -279,7 +279,7 @@ if netname == "NYC":
 j = [0, 0.1, 0.2, 0.3 , 0.4, 0.5 ,0.6, 0.7 , 0.8 , 0.9, 1]
 alg = 'CARS'+str(n)
 tstamp = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-dir_out = tstamp + '_' + 'penRate_'+netname+"_"+str(demand_multiplier)+modes
+dir_out = tstamp + '_' + 'penRate_'+netname+"_"+str(demand_multiplier)+modes+'_Reb_'+str(rebalancing)
 result = penRate(netname,
 		dir_out=dir_out,
 		rebalancing=rebalancing, 
