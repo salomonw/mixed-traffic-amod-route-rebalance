@@ -24,5 +24,5 @@ module load gurobi
 #python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 AP
 #python3 -m experiments.run_penRate_intermodal_journal EMA_mid 4 APB
 
-python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 A True
-python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 A False
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 A True
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 A False
