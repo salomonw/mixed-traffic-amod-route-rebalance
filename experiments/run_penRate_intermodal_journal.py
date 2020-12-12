@@ -81,13 +81,13 @@ def solve_stackelberg_game(par):
 				  userCentric=True)
         else:
             cars.solve_bush_CARSn(tnet=tNet_non_cavs, fcoeffs=fcoeffs, n=n, exogenous_G=tNet_cavs.G_supergraph, 
-				  rebalancing=rebalancing, bush=True, linear=linear, 
+				  rebalancing=False, bush=True, linear=linear, 
 				  theta_n=theta_n, theta=theta_non_cavs, a=a_non_cavs, od_flows_flag=False, 
 				  userCentric=True)
         #'''
         if i <=-10:
             cars.solve_bush_CARSn(tnet=tNet_cavs, fcoeffs=fcoeffs, n=n, exogenous_G=False,
-                                  rebalancing=rebalancing, bush=True, linear=linear,
+                                  rebalancing=False, bush=True, linear=linear,
                                   theta_n=theta_n, theta=theta_cavs, a=a_cavs, od_flows_flag=False)
         else:
             cars.solve_bush_CARSn(tnet=tNet_cavs, fcoeffs=fcoeffs, n=n, exogenous_G=tNet_non_cavs.G_supergraph,
