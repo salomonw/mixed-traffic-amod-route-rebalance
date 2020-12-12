@@ -268,6 +268,10 @@ netname = str(sys.argv[1])
 demand_multiplier = float(sys.argv[2])
 modes = str(sys.argv[3])
 rebalancing = sys.argv[4]
+if rebalancing == 'True':
+    rebalancing=True
+else:
+    rebalancing=False
 n = 10
 n_iter = 3
 theta_n = 3
