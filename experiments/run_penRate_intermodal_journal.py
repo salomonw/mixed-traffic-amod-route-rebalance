@@ -270,7 +270,7 @@ modes = str(sys.argv[3])
 rebalancing = sys.argv[4]
 n = 10
 n_iter = 3
-theta_n = 5
+theta_n = 3
 linear = False
 parallel = True
 
