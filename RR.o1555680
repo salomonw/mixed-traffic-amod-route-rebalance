@@ -31,3 +31,426 @@ Set parameter TokenServer to value sccsvc
 time spent on set_exogenous_flow: 0.02s
 Using license file /usr/local/gurobi/gurobi.lic
 Set parameter TokenServer to value sccsvc
+time spent on get_obj_CARSn: 8.49s
+time spent on add_epsilon_cnstr: 3.72s
+time spent on add_demand_cnstr: 8.72s
+time spent on add_rebalancing_cnstr: 0.55s
+time spent on set_optimal_flows: 11.17s
+time spent on solve_bush_CARSn: 491.01s
+time spent on set_exogenous_flow: 0.29s
+time spent on get_obj_CARSn: 42.43s
+time spent on add_epsilon_cnstr: 5.24s
+time spent on add_demand_cnstr: 8.89s
+time spent on add_rebalancing_cnstr: 0.55s
+time spent on set_optimal_flows: 13.37s
+time spent on solve_bush_CARSn: 509.81s
+0
+max flow:5.37
+time spent on set_exogenous_flow: 0.23s
+time spent on get_obj_CARSn: 52.32s
+time spent on add_epsilon_cnstr: 9.02s
+time spent on add_demand_cnstr: 18.17s
+time spent on set_optimal_flows: 14.17s
+time spent on solve_bush_CARSn: 357.89s
+time spent on set_exogenous_flow: 0.24s
+time spent on get_obj_CARSn: 74.85s
+time spent on add_epsilon_cnstr: 30.00s
+time spent on add_demand_cnstr: 73.78s
+time spent on add_rebalancing_cnstr: 4.86s
+time spent on set_optimal_flows: 11.34s
+time spent on solve_bush_CARSn: 732.47s
+1
+max flow:5.35
+time spent on set_exogenous_flow: 0.25s
+time spent on get_obj_CARSn: 55.61s
+time spent on add_epsilon_cnstr: 18.53s
+time spent on add_demand_cnstr: 39.90s
+time spent on set_optimal_flows: 12.72s
+time spent on solve_bush_CARSn: 440.45s
+time spent on set_exogenous_flow: 0.17s
+time spent on get_obj_CARSn: 68.89s
+time spent on add_epsilon_cnstr: 24.43s
+time spent on add_demand_cnstr: 49.49s
+time spent on add_rebalancing_cnstr: 2.79s
+time spent on set_optimal_flows: 9.07s
+time spent on solve_bush_CARSn: 598.49s
+2
+max flow:5.34
+0
+0.99
+time spent on get_obj_CARSn: 8.55s
+time spent on add_epsilon_cnstr: 3.81s
+time spent on add_demand_cnstr: 8.62s
+time spent on add_rebalancing_cnstr: 0.55s
+time spent on set_optimal_flows: 6.88s
+time spent on solve_bush_CARSn: 558.44s
+time spent on set_exogenous_flow: 0.08s
+time spent on get_obj_CARSn: 8.95s
+time spent on add_epsilon_cnstr: 3.77s
+time spent on add_demand_cnstr: 8.96s
+time spent on add_rebalancing_cnstr: 0.59s
+time spent on set_optimal_flows: 7.88s
+time spent on solve_bush_CARSn: 509.90s
+0
+max flow:5.84
+time spent on set_exogenous_flow: 0.16s
+time spent on get_obj_CARSn: 18.56s
+time spent on add_epsilon_cnstr: 5.63s
+time spent on add_demand_cnstr: 21.55s
+time spent on set_optimal_flows: 12.86s
+time spent on solve_bush_CARSn: 420.09s
+time spent on set_exogenous_flow: 0.29s
+time spent on get_obj_CARSn: 74.68s
+time spent on add_epsilon_cnstr: 33.19s
+time spent on add_demand_cnstr: 58.92s
+time spent on add_rebalancing_cnstr: 2.95s
+time spent on set_optimal_flows: 12.72s
+time spent on solve_bush_CARSn: 636.64s
+1
+max flow:5.41
+time spent on set_exogenous_flow: 0.23s
+time spent on get_obj_CARSn: 41.73s
+time spent on add_epsilon_cnstr: 16.78s
+time spent on add_demand_cnstr: 38.04s
+time spent on set_optimal_flows: 5.37s
+time spent on solve_bush_CARSn: 492.12s
+time spent on set_exogenous_flow: 0.19s
+time spent on get_obj_CARSn: 49.14s
+time spent on add_epsilon_cnstr: 18.46s
+time spent on add_demand_cnstr: 48.52s
+time spent on add_rebalancing_cnstr: 3.37s
+time spent on set_optimal_flows: 10.59s
+time spent on solve_bush_CARSn: 610.97s
+2
+max flow:5.36
+0
+0.9
+time spent on get_obj_CARSn: 9.40s
+time spent on add_epsilon_cnstr: 4.01s
+time spent on add_demand_cnstr: 9.58s
+time spent on add_rebalancing_cnstr: 0.56s
+time spent on set_optimal_flows: 3.78s
+time spent on solve_bush_CARSn: 563.38s
+time spent on set_exogenous_flow: 0.03s
+time spent on get_obj_CARSn: 8.70s
+time spent on add_epsilon_cnstr: 3.82s
+time spent on add_demand_cnstr: 11.29s
+time spent on add_rebalancing_cnstr: 2.57s
+time spent on set_optimal_flows: 1.64s
+time spent on solve_bush_CARSn: 538.53s
+0
+max flow:5.47
+time spent on set_exogenous_flow: 0.03s
+time spent on get_obj_CARSn: 18.83s
+time spent on add_epsilon_cnstr: 14.70s
+time spent on add_demand_cnstr: 47.63s
+time spent on set_optimal_flows: 7.33s
+time spent on solve_bush_CARSn: 579.78s
+time spent on set_exogenous_flow: 0.16s
+time spent on get_obj_CARSn: 34.04s
+time spent on add_epsilon_cnstr: 16.76s
+time spent on add_demand_cnstr: 36.57s
+time spent on add_rebalancing_cnstr: 2.42s
+time spent on set_optimal_flows: 6.46s
+time spent on solve_bush_CARSn: 523.30s
+1
+max flow:5.05
+time spent on set_exogenous_flow: 0.15s
+time spent on get_obj_CARSn: 36.78s
+time spent on add_epsilon_cnstr: 14.51s
+time spent on add_demand_cnstr: 45.73s
+time spent on set_optimal_flows: 7.55s
+time spent on solve_bush_CARSn: 503.13s
+time spent on set_exogenous_flow: 0.15s
+time spent on get_obj_CARSn: 49.38s
+time spent on add_epsilon_cnstr: 23.74s
+time spent on add_demand_cnstr: 51.83s
+time spent on add_rebalancing_cnstr: 3.05s
+time spent on set_optimal_flows: 9.80s
+time spent on solve_bush_CARSn: 592.87s
+2
+max flow:5.07
+0
+0.2
+time spent on get_obj_CARSn: 8.23s
+time spent on add_epsilon_cnstr: 3.67s
+time spent on add_demand_cnstr: 8.24s
+time spent on add_rebalancing_cnstr: 0.53s
+time spent on set_optimal_flows: 1.65s
+time spent on solve_bush_CARSn: 571.78s
+time spent on set_exogenous_flow: 0.03s
+time spent on get_obj_CARSn: 8.24s
+time spent on add_epsilon_cnstr: 3.96s
+time spent on add_demand_cnstr: 39.83s
+time spent on add_rebalancing_cnstr: 4.19s
+time spent on set_optimal_flows: 2.03s
+time spent on solve_bush_CARSn: 532.66s
+0
+max flow:6.01
+time spent on set_exogenous_flow: 0.06s
+time spent on get_obj_CARSn: 20.27s
+time spent on add_epsilon_cnstr: 15.76s
+time spent on add_demand_cnstr: 61.48s
+time spent on set_optimal_flows: 6.10s
+time spent on solve_bush_CARSn: 580.27s
+time spent on set_exogenous_flow: 0.15s
+time spent on get_obj_CARSn: 34.39s
+time spent on add_epsilon_cnstr: 17.61s
+time spent on add_demand_cnstr: 41.35s
+time spent on add_rebalancing_cnstr: 2.90s
+time spent on set_optimal_flows: 6.40s
+time spent on solve_bush_CARSn: 512.48s
+1
+max flow:5.28
+time spent on set_exogenous_flow: 0.13s
+time spent on get_obj_CARSn: 34.83s
+time spent on add_epsilon_cnstr: 16.04s
+time spent on add_demand_cnstr: 37.22s
+time spent on set_optimal_flows: 8.86s
+time spent on solve_bush_CARSn: 484.58s
+time spent on set_exogenous_flow: 0.16s
+time spent on get_obj_CARSn: 43.63s
+time spent on add_epsilon_cnstr: 23.21s
+time spent on add_demand_cnstr: 58.52s
+time spent on add_rebalancing_cnstr: 3.99s
+time spent on set_optimal_flows: 3.66s
+time spent on solve_bush_CARSn: 622.03s
+2
+max flow:5.24
+0
+0.8
+time spent on get_obj_CARSn: 8.30s
+time spent on add_epsilon_cnstr: 3.68s
+time spent on add_demand_cnstr: 8.38s
+time spent on add_rebalancing_cnstr: 0.53s
+time spent on set_optimal_flows: 2.73s
+time spent on solve_bush_CARSn: 565.18s
+time spent on set_exogenous_flow: 0.03s
+time spent on get_obj_CARSn: 8.43s
+time spent on add_epsilon_cnstr: 3.79s
+time spent on add_demand_cnstr: 15.01s
+time spent on add_rebalancing_cnstr: 2.37s
+time spent on set_optimal_flows: 4.63s
+time spent on solve_bush_CARSn: 523.82s
+0
+max flow:5.94
+time spent on set_exogenous_flow: 0.08s
+time spent on get_obj_CARSn: 12.21s
+time spent on add_epsilon_cnstr: 7.70s
+time spent on add_demand_cnstr: 35.93s
+time spent on set_optimal_flows: 9.54s
+time spent on solve_bush_CARSn: 589.04s
+time spent on set_exogenous_flow: 0.16s
+time spent on get_obj_CARSn: 34.24s
+time spent on add_epsilon_cnstr: 17.55s
+time spent on add_demand_cnstr: 40.91s
+time spent on add_rebalancing_cnstr: 2.62s
+time spent on set_optimal_flows: 5.94s
+time spent on solve_bush_CARSn: 571.11s
+1
+max flow:5.22
+time spent on set_exogenous_flow: 0.18s
+time spent on get_obj_CARSn: 38.34s
+time spent on add_epsilon_cnstr: 22.81s
+time spent on add_demand_cnstr: 67.80s
+time spent on set_optimal_flows: 8.48s
+time spent on solve_bush_CARSn: 561.14s
+time spent on set_exogenous_flow: 0.24s
+time spent on get_obj_CARSn: 54.40s
+time spent on add_epsilon_cnstr: 26.26s
+time spent on add_demand_cnstr: 69.63s
+time spent on add_rebalancing_cnstr: 3.65s
+time spent on set_optimal_flows: 8.77s
+time spent on solve_bush_CARSn: 600.49s
+2
+max flow:5.19
+0
+0.7
+time spent on get_obj_CARSn: 8.49s
+time spent on add_epsilon_cnstr: 3.73s
+time spent on add_demand_cnstr: 8.76s
+time spent on add_rebalancing_cnstr: 0.55s
+time spent on set_optimal_flows: 6.51s
+time spent on solve_bush_CARSn: 548.65s
+time spent on set_exogenous_flow: 0.08s
+time spent on get_obj_CARSn: 11.57s
+time spent on add_epsilon_cnstr: 3.66s
+time spent on add_demand_cnstr: 8.32s
+time spent on add_rebalancing_cnstr: 0.56s
+time spent on set_optimal_flows: 9.77s
+time spent on solve_bush_CARSn: 399.96s
+0
+max flow:5.66
+time spent on set_exogenous_flow: 0.29s
+time spent on get_obj_CARSn: 65.82s
+time spent on add_epsilon_cnstr: 21.37s
+time spent on add_demand_cnstr: 31.96s
+time spent on set_optimal_flows: 6.93s
+time spent on solve_bush_CARSn: 731.45s
+time spent on set_exogenous_flow: 0.12s
+time spent on get_obj_CARSn: 38.79s
+time spent on add_epsilon_cnstr: 17.83s
+time spent on add_demand_cnstr: 39.35s
+time spent on add_rebalancing_cnstr: 2.62s
+time spent on set_optimal_flows: 8.81s
+time spent on solve_bush_CARSn: 487.27s
+1
+max flow:5.25
+time spent on set_exogenous_flow: 0.17s
+time spent on get_obj_CARSn: 39.22s
+time spent on add_epsilon_cnstr: 15.74s
+time spent on add_demand_cnstr: 38.85s
+time spent on set_optimal_flows: 8.82s
+time spent on solve_bush_CARSn: 693.87s
+time spent on set_exogenous_flow: 0.32s
+time spent on get_obj_CARSn: 63.61s
+time spent on add_epsilon_cnstr: 29.62s
+time spent on add_demand_cnstr: 52.83s
+time spent on add_rebalancing_cnstr: 3.62s
+time spent on set_optimal_flows: 7.77s
+time spent on solve_bush_CARSn: 582.34s
+2
+max flow:5.25
+0
+0.01
+time spent on get_obj_CARSn: 8.44s
+time spent on add_epsilon_cnstr: 3.73s
+time spent on add_demand_cnstr: 8.77s
+time spent on add_rebalancing_cnstr: 0.56s
+time spent on set_optimal_flows: 9.07s
+time spent on solve_bush_CARSn: 544.34s
+time spent on set_exogenous_flow: 0.11s
+time spent on get_obj_CARSn: 14.17s
+time spent on add_epsilon_cnstr: 3.74s
+time spent on add_demand_cnstr: 8.89s
+time spent on add_rebalancing_cnstr: 0.59s
+time spent on set_optimal_flows: 3.68s
+time spent on solve_bush_CARSn: 545.00s
+0
+max flow:5.83
+time spent on set_exogenous_flow: 0.08s
+time spent on get_obj_CARSn: 12.84s
+time spent on add_epsilon_cnstr: 8.69s
+time spent on add_demand_cnstr: 35.42s
+time spent on set_optimal_flows: 4.96s
+time spent on solve_bush_CARSn: 613.07s
+time spent on set_exogenous_flow: 0.12s
+time spent on get_obj_CARSn: 37.19s
+time spent on add_epsilon_cnstr: 19.07s
+time spent on add_demand_cnstr: 36.68s
+time spent on add_rebalancing_cnstr: 2.57s
+time spent on set_optimal_flows: 2.81s
+time spent on solve_bush_CARSn: 570.83s
+1
+max flow:5.1
+time spent on set_exogenous_flow: 0.15s
+time spent on get_obj_CARSn: 49.51s
+time spent on add_epsilon_cnstr: 24.94s
+time spent on add_demand_cnstr: 67.68s
+time spent on set_optimal_flows: 11.45s
+time spent on solve_bush_CARSn: 655.80s
+time spent on set_exogenous_flow: 0.27s
+time spent on get_obj_CARSn: 54.85s
+time spent on add_epsilon_cnstr: 22.81s
+time spent on add_demand_cnstr: 57.40s
+time spent on add_rebalancing_cnstr: 3.89s
+time spent on set_optimal_flows: 2.69s
+time spent on solve_bush_CARSn: 652.70s
+2
+max flow:5.13
+0
+0.6
+time spent on get_obj_CARSn: 8.32s
+time spent on add_epsilon_cnstr: 3.70s
+time spent on add_demand_cnstr: 8.40s
+time spent on add_rebalancing_cnstr: 0.53s
+time spent on set_optimal_flows: 10.20s
+time spent on solve_bush_CARSn: 544.52s
+time spent on set_exogenous_flow: 0.11s
+time spent on get_obj_CARSn: 13.68s
+time spent on add_epsilon_cnstr: 3.96s
+time spent on add_demand_cnstr: 9.53s
+time spent on add_rebalancing_cnstr: 0.58s
+time spent on set_optimal_flows: 12.27s
+time spent on solve_bush_CARSn: 485.44s
+0
+max flow:5.42
+time spent on set_exogenous_flow: 0.18s
+time spent on get_obj_CARSn: 38.03s
+time spent on add_epsilon_cnstr: 10.25s
+time spent on add_demand_cnstr: 14.76s
+time spent on set_optimal_flows: 13.19s
+time spent on solve_bush_CARSn: 609.33s
+time spent on set_exogenous_flow: 0.26s
+time spent on get_obj_CARSn: 32.61s
+time spent on add_epsilon_cnstr: 15.05s
+time spent on add_demand_cnstr: 40.67s
+time spent on add_rebalancing_cnstr: 2.64s
+time spent on set_optimal_flows: 9.01s
+time spent on solve_bush_CARSn: 530.17s
+1
+max flow:5.17
+time spent on set_exogenous_flow: 0.18s
+time spent on get_obj_CARSn: 36.88s
+time spent on add_epsilon_cnstr: 16.45s
+time spent on add_demand_cnstr: 34.37s
+time spent on set_optimal_flows: 9.25s
+time spent on solve_bush_CARSn: 495.83s
+time spent on set_exogenous_flow: 0.16s
+time spent on get_obj_CARSn: 43.45s
+time spent on add_epsilon_cnstr: 24.61s
+time spent on add_demand_cnstr: 56.66s
+time spent on add_rebalancing_cnstr: 3.60s
+time spent on set_optimal_flows: 2.21s
+time spent on solve_bush_CARSn: 842.23s
+2
+max flow:5.19
+0
+0.1
+time spent on get_obj_CARSn: 8.25s
+time spent on add_epsilon_cnstr: 3.68s
+time spent on add_demand_cnstr: 8.48s
+time spent on add_rebalancing_cnstr: 0.53s
+time spent on set_optimal_flows: 1.74s
+time spent on solve_bush_CARSn: 566.92s
+time spent on set_exogenous_flow: 0.03s
+time spent on get_obj_CARSn: 8.33s
+time spent on add_epsilon_cnstr: 3.71s
+time spent on add_demand_cnstr: 21.22s
+time spent on add_rebalancing_cnstr: 2.61s
+time spent on set_optimal_flows: 5.39s
+time spent on solve_bush_CARSn: 520.29s
+0
+max flow:5.53
+time spent on set_exogenous_flow: 0.09s
+time spent on get_obj_CARSn: 11.64s
+time spent on add_epsilon_cnstr: 8.07s
+time spent on add_demand_cnstr: 31.70s
+time spent on set_optimal_flows: 6.18s
+time spent on solve_bush_CARSn: 695.91s
+time spent on set_exogenous_flow: 0.18s
+time spent on get_obj_CARSn: 49.27s
+time spent on add_epsilon_cnstr: 33.62s
+time spent on add_demand_cnstr: 81.29s
+time spent on add_rebalancing_cnstr: 5.13s
+time spent on set_optimal_flows: 10.99s
+time spent on solve_bush_CARSn: 671.10s
+1
+max flow:5.0
+time spent on set_exogenous_flow: 0.25s
+time spent on get_obj_CARSn: 66.36s
+time spent on add_epsilon_cnstr: 26.26s
+time spent on add_demand_cnstr: 59.49s
+time spent on set_optimal_flows: 8.23s
+time spent on solve_bush_CARSn: 544.03s
+time spent on set_exogenous_flow: 0.19s
+time spent on get_obj_CARSn: 51.65s
+time spent on add_epsilon_cnstr: 26.28s
+time spent on add_demand_cnstr: 61.66s
+time spent on add_rebalancing_cnstr: 3.75s
+time spent on set_optimal_flows: 2.89s
+time spent on solve_bush_CARSn: 508.64s
+2
+max flow:5.01
+0
+0.3
