@@ -272,8 +272,8 @@ if rebalancing == 'True':
     rebalancing=True
 else:
     rebalancing=False
-n = 6
-n_iter = 2
+n = 10
+n_iter = 5
 theta_n = 3
 linear = False
 parallel = True
