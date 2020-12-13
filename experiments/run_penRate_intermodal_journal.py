@@ -54,7 +54,7 @@ def solve_stackelberg_game(par):
     tNet_non_cavs.build_supergraph(identical_G=True)
 
     theta_cavs, a_cavs = get_pwfunction(fcoeffs, n, theta_n, userCentric=False)
-    theta_non_cavs, a_non_cavs = get_pwfunction(fcoeffs, n, theta_n, userCentric=True)
+    theta_non_cavs, a_non_cavs = get_pwfunction(fcoeffs, n, theta_n, theta=theta_cavs, userCentric=True)
 
     #'''
     # add biking network
@@ -272,9 +272,9 @@ if rebalancing == 'True':
     rebalancing=True
 else:
     rebalancing=False
-n = 8
-n_iter = 3
-theta_n = 4
+n = 6
+n_iter = 2
+theta_n = 3
 linear = False
 parallel = True
 
