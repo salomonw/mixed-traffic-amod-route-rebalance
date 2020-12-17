@@ -169,7 +169,7 @@ def penRate(netname, dir_out, rebalancing=True, linear=False, n=5, theta_n=3, de
     bikeFlow = []
     subwayFlow = []
     if parallel:
-        pool = mp.Pool(12)
+        pool = mp.Pool(6)
         pars = [(netname, dir_out, penetration_rate, rebalancing, linear, n, theta_n, demand_multiplier, n_iter) for penetration_rate in j]
         results = pool.map(solve_stackelberg_game, pars)
     else:
@@ -272,7 +272,7 @@ if rebalancing == 'True':
     rebalancing=True
 else:
     rebalancing=False
-n = 10
+n = 8
 n_iter = 5
 theta_n = 3
 linear = False
