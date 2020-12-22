@@ -314,7 +314,7 @@ def rebRouteFinder(G, eps, print_=False):
         for o,d in xf.keys():
             gw = [(o,d), sum([v for k,v in xf[(o,d)].items() if k[0]==o])]
             if gw[1] > eps:
-                routes = routeFinder_OD(G, gw, xf[(o,d)], eps=eps, max_routes=10)
+                routes = routeFinder_OD(G, gw, xf[(o,d)], eps=eps, max_routes=20)
                 routes_dic[(o,d)] = routes
     if print_:
         print('Route-flows have been found!')
@@ -330,6 +330,6 @@ def userRouteFinder(G, g, s_flows, eps):
         for o,d in xf.keys():
             gw = [(o,d), sum([v for k,v in xf[(o,d)].items() if k[0]==o])]
             if gw[1] > eps:
-                routes = routeFinder_OD(G, gw, xf[(o,d)], eps=20, max_routes=10)
+                routes = routeFinder_OD(G, gw, xf[(o,d)], eps=20, max_routes=20)
                 routes_dic[(o,d)] = routes
     return routes_dic

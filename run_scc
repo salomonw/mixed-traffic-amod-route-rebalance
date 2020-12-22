@@ -24,8 +24,8 @@ module load gurobi
 #python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 AP
 #python3 -m experiments.run_penRate_intermodal_journal EMA_mid 4 APB
 
-#python3 -m experiments.run_penRate_intermodal_journal NYC 1.5 A True
-#python3 -m experiments.run_penRate_intermodal_journal NYC 1.5 AS True
-#python3 -m experiments.run_penRate_intermodal_journal NYC 1.5 ASB True
-#python3 -m experiments.run_penRate_intermodal_journal NYC 1.5 ASP True
-python3 -m experiments.run_penRate_intermodal_journal NYC 1.5 ASPB True
+#python3 -m experiments.run_penRate_intermodal_journal NYC 4 A True
+#python3 -m experiments.run_penRate_intermodal_journal NYC 4 AS True
+#python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASB True
+#python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASP True
+python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASPB True
