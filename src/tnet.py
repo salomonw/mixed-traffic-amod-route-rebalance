@@ -425,15 +425,21 @@ def plot_network_flows(G, weight='flow', width=3, cmap=plt.cm.Blues):
     nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=labels)
     return fig, ax
 
-def plot_network(G, width=1, cmap=plt.cm.Blues):
+def plot_network(G, width=1, cmap=plt.cm.Blues, edgecolors=False):
     # TODO: add explaination
     fig, ax = plt.subplots()
     pos = nx.get_node_attributes(G, 'pos')
     #edges = list(G.edges())
     #nx.draw(G, pos, node_color='b', edgelist=edges, edge_color=weights, width=width, edge_cmap=cmap)
-    nx.draw(G, pos, node_color='k',  width=width, edge_cmap=cmap, arrowsize=4, node_size=15, alpha=0.7,
+    if edgecolors==False:
+        nx.draw(G, pos, node_color='k',  width=width, edge_cmap=cmap, arrowsize=4, node_size=15, alpha=0.7,
         connectionstyle='arc3, rad=0.04'
             )
+    else:
+        nx.draw(G, pos, node_color='k',  width=width, edge_cmap=cmap, arrowsize=4, node_size=15, alpha=0.7,
+        connectionstyle='arc3, rad=0.04', edge_color=edgecolors
+        )
+
     #labels = {(i, j): int(G[i][j][weight]) for i, j in G.edges()}
     #nx.draw_networkx_edge_labels(G, pos=pos, with_labels=True)
     return fig, ax

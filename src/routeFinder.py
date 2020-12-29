@@ -333,3 +333,18 @@ def userRouteFinder(G, g, s_flows, eps):
                 routes = routeFinder_OD(G, gw, xf[(o,d)], eps=20, max_routes=20)
                 routes_dic[(o,d)] = routes
     return routes_dic
+
+
+#xf = solve_flow_decomposition_D(G, origin, x, g, L=1)
+
+def RouteFinder(G, g, s_flows, eps, od):
+    o,d = od
+    x = s_flows[o]
+    xf = solve_flow_decomposition_D(G, o, x, g, L=1)
+    xf = {(o, dest):v for dest, v in xf.items()}
+    gw = [(o,d), sum([v for k,v in xf[(o,d)].items() if k[0]==o])]
+    routes = routeFinder_OD(G, gw, xf[(o,d)], eps=5, max_routes=20)
+    return routes
+
+def RouteTravelTime(G,path):
+    return sum([G[path[i]][path[i+1]]['t_k'] for i in range(len(path)-1)])
