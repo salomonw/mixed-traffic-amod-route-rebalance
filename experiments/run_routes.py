@@ -30,10 +30,10 @@ def od_travel_times(tNet, s_flows, od):
 
 
 def plot_network(G, ax, width=1, cmap=plt.cm.Blues, edge_width=False, 
-	edgecolors=False, nodecolors=False, nodesize=False, arrowsize=False):
+	edgecolors=False, nodecolors=False, nodesize=False, arrowsize=False,edge_alpha=1):
     pos = nx.get_node_attributes(G, 'pos')
     nx.draw(G, pos, width=edge_width,  ax=ax, edge_color=edgecolors, node_size=nodesize, node_color=nodecolors,
-    	connectionstyle='arc3, rad=0.04',arrowsize=2, arrowstyle='fancy')
+    	connectionstyle='arc3, rad=0.04',arrowsize=2, arrowstyle='fancy',alpha=edge_alpha)
 
 
 
@@ -55,7 +55,7 @@ def plot_routes(G, od, result, ax):
 		arrow_size = [3 if e in r_links else 0.2 for e in G.edges()]
 		plot_network(tNet.G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors=node_color, 
-			nodesize=node_size, arrowsize=arrow_size)
+			nodesize=node_size, arrowsize=arrow_size,edge_alpha=0.6)
 		l+=1
 	return ax
 
@@ -74,7 +74,7 @@ def weighted_avg_and_std(values, weights):
 
 #netname = 'NYC'
 net = 'EMA_mid'
-g_mul = 2
+g_mul = 2.5
 
 tNet, fcoeffs = read_net(net)
 #tNet_UC = copy.deepcopy(tNet)
@@ -110,7 +110,7 @@ print(objSO)
 #userRoutes = routeFinder.userRouteFinder(tNet.G, tNet.g, s_flows, eps=0)
 
 #select OD pair
-random.seed(8)
+random.seed(5)
 ods = dict(sorted(tNet.g.items(), key=lambda item: item[1]))
 ods = list(ods.keys())[-30:]
 
@@ -126,7 +126,7 @@ table['TT_UC'] = []
 table['stdTT'] = []
 table['WstdTT'] = []
 
-for od in ods[0:10]:
+for od in ods[0:5]:
 	result = od_travel_times(tNet, s_flows, od)
 	fig, ax = plt.subplots()
 	plot_routes(tNet.G_supergraph, od, result, ax)
