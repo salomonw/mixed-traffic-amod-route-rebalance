@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/share/pkg.7/python3/3.7.9/install/lib/python3.7/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/share/pkg.7/python3/3.7.9/install/lib/python3.7/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/usr3/graduate/salomonw/Github/mixed-traffic-amod-route-rebalance/experiments/run_penRate_intermodal_journal.py", line 269, in <module>
+    rebalancing = sys.argv[4]
+IndexError: list index out of range
