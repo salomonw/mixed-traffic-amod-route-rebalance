@@ -39,7 +39,9 @@ def plot_network(G, ax, width=1, cmap=plt.cm.Blues, edge_width=False,
 
 def plot_routes(G, od, result, ax):
 	#fig, ax = plt.subplots()
-	colors = ['r', 'b', 'y', 'orange']
+	cmap = color = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+             for i in range(30)]
+	#colors = ['r', 'b', 'y', 'orange']
 	tNet.read_node_coordinates('data/pos/'+net+'.txt')
 	#tnet.plot_network(tNet.G, width=0.3)
 	node_color = ['b' if n in [od[0]] else 'gray' for n in G.nodes()]
@@ -50,7 +52,7 @@ def plot_routes(G, od, result, ax):
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
 		#for link in r_links:
-		edge_colors = [colors[l] if e in r_links else 'gray' for e in G.edges()]
+		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
 		edge_width = [2 if e in r_links else 0.2 for e in G.edges()]
 		arrow_size = [3 if e in r_links else 0.2 for e in G.edges()]
 		plot_network(tNet.G, ax, edge_width=edge_width, 
@@ -110,7 +112,7 @@ print(objSO)
 #userRoutes = routeFinder.userRouteFinder(tNet.G, tNet.g, s_flows, eps=0)
 
 #select OD pair
-random.seed(5)
+random.seed(15)
 ods = dict(sorted(tNet.g.items(), key=lambda item: item[1]))
 ods = list(ods.keys())[-30:]
 
@@ -126,7 +128,7 @@ table['TT_UC'] = []
 table['stdTT'] = []
 table['WstdTT'] = []
 
-for od in ods[0:5]:
+for od in ods:
 	result = od_travel_times(tNet, s_flows, od)
 	fig, ax = plt.subplots()
 	plot_routes(tNet.G_supergraph, od, result, ax)
