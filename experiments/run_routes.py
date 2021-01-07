@@ -37,8 +37,8 @@ def plot_network(G, ax, width=1, cmap=plt.cm.Blues, edge_width=False,
 
 
 
-def plot_routes(G,od, result):
-	fig, ax = plt.subplots()
+def plot_routes(G, od, result, ax):
+	#fig, ax = plt.subplots()
 	colors = ['r', 'b', 'y', 'orange']
 	tNet.read_node_coordinates('data/pos/'+net+'.txt')
 	#tnet.plot_network(tNet.G, width=0.3)
@@ -57,8 +57,7 @@ def plot_routes(G,od, result):
 			edgecolors=edge_colors, nodecolors=node_color, 
 			nodesize=node_size, arrowsize=arrow_size)
 		l+=1
-
-	plt.show()
+	return ax
 
 def weighted_avg_and_std(values, weights):
     """
@@ -78,35 +77,35 @@ net = 'EMA_mid'
 g_mul = 2
 
 tNet, fcoeffs = read_net(net)
-tNet_UC = copy.deepcopy(tNet)
+#tNet_UC = copy.deepcopy(tNet)
 
 tNet.build_supergraph(identical_G=True)
 g_per = tnet.perturbDemandConstant(tNet.g, g_mul)
 tNet.set_g(g_per)
 
 
-tNet_UC.build_supergraph(identical_G=True)
-g_per = tnet.perturbDemandConstant(tNet_UC.g, g_mul)
-tNet_UC.set_g(g_per)
+#tNet_UC.build_supergraph(identical_G=True)
+#g_per = tnet.perturbDemandConstant(tNet_UC.g, g_mul)
+#tNet_UC.set_g(g_per)
 
 tNet, runtime, s_flows = cars.solve_bush_CARSn(tNet, fcoeffs=fcoeffs, n=8,
                                                 exogenous_G=False, rebalancing=False,
                                                 linear=False, bush=True)
 
-tNet_UC, runtime, s_flows_UC = cars.solve_bush_CARSn(tNet_UC, fcoeffs=fcoeffs, n=8,
-                                                exogenous_G=False, rebalancing=False,
-                                                linear=False, bush=True, userCentric=True)
+#tNet_UC, runtime, s_flows_UC = cars.solve_bush_CARSn(tNet_UC, fcoeffs=fcoeffs, n=8,
+#                                                exogenous_G=False, rebalancing=False,
+#                                                linear=False, bush=True, userCentric=True)
 
 
 cars.supergraph2G(tNet)
-cars.supergraph2G(tNet_UC)
+#cars.supergraph2G(tNet_UC)
 
 objSO = sum([tNet.G[i][j]['flow']*tNet.G[i][j]['t_k'] for i,j in tNet.G.edges()])
-objUC = sum([tNet_UC.G[i][j]['flow']*tNet_UC.G[i][j]['t_k'] for i,j in tNet_UC.G.edges()])
+#objUC = sum([tNet_UC.G[i][j]['flow']*tNet_UC.G[i][j]['t_k'] for i,j in tNet_UC.G.edges()])
 
 print(objSO)
-print(objUC)
-print(objUC/objSO)
+#print(objUC)
+#print(objUC/objSO)
 #rebRoutes = routeFinder.rebRouteFinder(tNet.G, eps=0)
 #userRoutes = routeFinder.userRouteFinder(tNet.G, tNet.g, s_flows, eps=0)
 
@@ -127,8 +126,12 @@ table['TT_UC'] = []
 table['stdTT'] = []
 table['WstdTT'] = []
 
-for od in ods:
+for od in ods[0:10]:
 	result = od_travel_times(tNet, s_flows, od)
+	fig, ax = plt.subplots()
+	plot_routes(tNet.G_supergraph, od, result, ax)
+	plt.savefig('plot_'+str(od)+'.pdf')	
+	'''
 	resultUC = od_travel_times(tNet_UC, s_flows_UC, od)
 	print([v['tt'] for k,v in resultUC.items()])
 	tts = [(v['p'], v['tt']) for k,v in result.items()]
@@ -147,6 +150,6 @@ for od in ods:
 	table['WstdTT'].append(weighted_avg_and_std(tts, ps))
 	df = pd.DataFrame.from_dict(table, orient='index').transpose()
 	print(df)
-
+	'''
 
 
