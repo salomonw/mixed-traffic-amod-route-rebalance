@@ -5,7 +5,7 @@
 #$ -j y
 #$ -m bae
 #$ -pe omp 24
-#$ -l h_rt=47:59:00
+#$ -l h_rt=17:59:00
 
 # Load Modules
 module load python3
@@ -24,8 +24,7 @@ module load gurobi
 #python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 AP
 #python3 -m experiments.run_penRate_intermodal_journal EMA_mid 4 APB
 
-#python3 -m experiments.run_penRate_intermodal_journal NYC 4 A True
-#python3 -m experiments.run_penRate_intermodal_journal NYC 4 AS True
+python3 -m experiments.run_penRate_intermodal_journal NYC 1 AS True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASB True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASP True
-python3 -m experiments.run_penRate_intermodal_journal NYC 2 ASPB True
+#python3 -m experiments.run_penRate_intermodal_journal NYC 2 ASPB True
