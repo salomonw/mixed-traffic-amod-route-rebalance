@@ -983,7 +983,7 @@ def get_total_G_flow(G):
     float
 
     """
-    return sum([G[i][j]['flow'] for i,j in G.edges()])
+    return sum([G[i][j]['flow']*G[i][j]['length'] for i,j in G.edges()])
 
 
 from datetime import datetime

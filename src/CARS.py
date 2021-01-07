@@ -863,7 +863,7 @@ def get_pedestrian_flow(tnet):
     float
 
     """
-    return sum([tnet.G_supergraph[i][j]['flow'] for i,j in tnet.G_supergraph.edges() if tnet.G_supergraph[i][j]['type']=='p'])
+    return sum([tnet.G_supergraph[i][j]['flow']*tnet.G_supergraph[i][j]['length'] for i,j in tnet.G_supergraph.edges() if tnet.G_supergraph[i][j]['type']=='p'])
 
 
 def get_layer_flow(tnet, symb="'"):
@@ -880,7 +880,7 @@ def get_layer_flow(tnet, symb="'"):
     float
 
     """
-    return sum([tnet.G_supergraph[i][j]['flow'] for i,j in tnet.G_supergraph.edges() if tnet.G_supergraph[i][j]['type']==symb])
+    return sum([tnet.G_supergraph[i][j]['flow']*tnet.G_supergraph[i][j]['length'] for i,j in tnet.G_supergraph.edges() if tnet.G_supergraph[i][j]['type']==symb])
 
 
 def get_amod_flow(tnet):
@@ -897,7 +897,7 @@ def get_amod_flow(tnet):
     float
 
     """
-    return sum([tnet.G_supergraph[i][j]['flowNoRebalancing'] for i,j in tnet.G.edges()])
+    return sum([tnet.G_supergraph[i][j]['flowNoRebalancing']*tnet.G_supergraph[i][j]['length'] for i,j in tnet.G.edges()])
 
 def get_rebalancing_flow(tnet):
     """
@@ -913,7 +913,7 @@ def get_rebalancing_flow(tnet):
     float
 
     """
-    return sum([tnet.G_supergraph[i][j]['flow']-tnet.G_supergraph[i][j]['flowNoRebalancing'] for i,j in tnet.G.edges()])
+    return sum([(tnet.G_supergraph[i][j]['flow']-tnet.G_supergraph[i][j]['flowNoRebalancing'])*tnet.G_supergraph[i][j]['length'] for i,j in tnet.G.edges()])
 
 
 def UC_fcoeffs(fcoeffs):

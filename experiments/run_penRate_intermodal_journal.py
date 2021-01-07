@@ -145,7 +145,6 @@ def solve_stackelberg_game(par):
     subwayFlow = 0
     if netname == 'NYC':
         subwayFlow = cars.get_layer_flow(tNet_cavs, symb="s")
-    print(subwayFlow)
     identical_G=False
     plt.tight_layout()
     mkdir_n('results/' + dir_out)
