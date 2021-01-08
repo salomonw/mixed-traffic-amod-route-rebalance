@@ -34,7 +34,7 @@ def plot_network(G, ax, width=1, cmap=plt.cm.Blues, edge_width=False,
 	edgecolors=False, nodecolors=False, nodesize=False, arrowsize=False,edge_alpha=1):
     pos = nx.get_node_attributes(G, 'pos')
     nx.draw(G, pos, width=edge_width,  ax=ax, edge_color=edgecolors, node_size=nodesize, node_color=nodecolors,
-    	connectionstyle='arc3, rad=0.04',arrowsize=2, arrowstyle='fancy',alpha=edge_alpha)
+    	connectionstyle='arc3, rad=0.04',arrowsize=0, arrowstyle='fancy',alpha=edge_alpha)
 
 
 
@@ -47,18 +47,18 @@ def plot_routes(G, od, result, ax):
 	#tnet.plot_network(tNet.G, width=0.3)
 	node_color = ['blue' if n in [od[0]] else 'gray' for n in G.nodes()]
 	node_color = ['green' if n in [od[1]] else 'gray' for n in G.nodes()]
-	node_size = [25 if n in [od[0], od[1]] else 5 for n in G.nodes()]
+	node_size = [25 if n in [od[0], od[1]] else 0 for n in G.nodes()]
 	l =0
-	plot_network(tNet.G, ax, edge_width=0.2,
+	plot_network(tNet.G, ax, edge_width=0.1,
                      edgecolors='gray', nodecolors=node_color,
-                     nodesize=node_size, arrowsize=0.2,edge_alpha=0.5)
+                     nodesize=node_size, arrowsize=0,edge_alpha=0.2)
 	for i, dic in result.items():
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
 		#for link in r_links:
 		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
 		edge_width = [2 if e in r_links else 0 for e in G.edges()]
-		arrow_size = [3 if e in r_links else 0 for e in G.edges()]
+		arrow_size = [0 if e in r_links else 0 for e in G.edges()]
 		plot_network(tNet.G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors=node_color, 
 			nodesize=node_size, arrowsize=arrow_size,edge_alpha=0.7)
@@ -115,8 +115,8 @@ print(objSO)
 #userRoutes = routeFinder.userRouteFinder(tNet.G, tNet.g, s_flows, eps=0)
 
 #select OD pair
-random.seed(8)
-ods = dict(sorted(tNet.g.items(), key=lambda item: item[1]))
+random.seed(2)
+ods = dict(tNet.g.items(), key=lambda item: item[1])
 ods = list(ods.keys())[-30:]
 
 table = {}

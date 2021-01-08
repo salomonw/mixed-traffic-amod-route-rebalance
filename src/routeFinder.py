@@ -343,7 +343,7 @@ def RouteFinder(G, g, s_flows, eps, od):
     xf = solve_flow_decomposition_D(G, o, x, g, L=1)
     xf = {(o, dest):v for dest, v in xf.items()}
     gw = [(o,d), sum([v for k,v in xf[(o,d)].items() if k[0]==o])]
-    routes = routeFinder_OD(G, gw, xf[(o,d)], eps=5, max_routes=20)
+    routes = routeFinder_OD(G, gw, xf[(o,d)], eps=eps, max_routes=10)
     return routes
 
 def RouteTravelTime(G,path):
