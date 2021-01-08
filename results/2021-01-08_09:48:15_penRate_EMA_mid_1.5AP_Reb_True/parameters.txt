@@ -1,0 +1,4 @@
+n: 8
+theta_n: 3
+linear: False
+g_multi: 1.5

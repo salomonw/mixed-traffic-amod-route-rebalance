@@ -12,27 +12,25 @@ module load python3
 module load gurobi
 
 # Run program
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 A
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 AP
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 APB
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 A
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 AP
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 APB
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 A
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 AP
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 APB
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 4 A
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 AP
-#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 4 APB
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 A True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 AP True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1 APB True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 A True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 AP True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 1.5 APB True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 A True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 AP True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 2 APB True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 4 A True
+#python3 -m experiments.run_penRate_intermodal_journal EMA_mid 4 AP True
+python3 -m experiments.run_penRate_intermodal_journal EMA_mid 4 APB True
 
 
 #python3 -m experiments.run_penRate_intermodal_journal NYC 1 A True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 1 AS True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 1 ASB True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 1 ASP True
-python3 -m experiments.run_penRate_intermodal_journal NYC 1 ASPB True
+#python3 -m experiments.run_penRate_intermodal_journal NYC 1 ASPB True
 
 
 #python3 -m experiments.run_penRate_intermodal_journal NYC 1.5 A True

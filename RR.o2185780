@@ -16,3 +16,67 @@ time spent on set_exogenous_flow: 0.12s
 Using license file /usr/local/gurobi/gurobi.lic
 Set parameter TokenServer to value sccsvc
 Set parameter TokenServer to value sccsvc
+time spent on get_obj_CARSn: 6.32s
+time spent on add_epsilon_cnstr: 2.66s
+time spent on add_demand_cnstr: 26.67s
+time spent on add_rebalancing_cnstr: 0.52s
+time spent on set_optimal_flows: 8.05s
+time spent on solve_bush_CARSn: 543.20s
+time spent on set_exogenous_flow: 0.14s
+time spent on get_obj_CARSn: 14.76s
+time spent on add_epsilon_cnstr: 11.55s
+time spent on add_demand_cnstr: 146.12s
+time spent on add_rebalancing_cnstr: 3.23s
+time spent on set_optimal_flows: 35.12s
+time spent on solve_bush_CARSn: 15823.99s
+0
+max flow:2.87
+time spent on set_exogenous_flow: 0.53s
+time spent on get_obj_CARSn: 32.43s
+time spent on add_epsilon_cnstr: 14.18s
+time spent on add_demand_cnstr: 146.09s
+time spent on set_optimal_flows: 33.70s
+time spent on solve_bush_CARSn: 1129.19s
+time spent on set_exogenous_flow: 0.92s
+time spent on get_obj_CARSn: 37.70s
+time spent on add_epsilon_cnstr: 18.09s
+time spent on add_demand_cnstr: 179.06s
+time spent on add_rebalancing_cnstr: 3.58s
+time spent on set_optimal_flows: 32.42s
+time spent on solve_bush_CARSn: 12099.91s
+1
+max flow:2.57
+time spent on set_exogenous_flow: 0.72s
+time spent on get_obj_CARSn: 22.65s
+time spent on add_epsilon_cnstr: 9.68s
+time spent on add_demand_cnstr: 124.50s
+time spent on set_optimal_flows: 43.19s
+time spent on solve_bush_CARSn: 839.83s
+time spent on set_exogenous_flow: 0.95s
+time spent on get_obj_CARSn: 38.75s
+time spent on add_epsilon_cnstr: 16.53s
+time spent on add_demand_cnstr: 170.08s
+time spent on add_rebalancing_cnstr: 3.38s
+time spent on set_optimal_flows: 34.09s
+time spent on solve_bush_CARSn: 12231.99s
+2
+max flow:2.56
+0.3
+time spent on set_exogenous_flow: 0.02s
+Using license file /usr/local/gurobi/gurobi.lic
+time spent on set_exogenous_flow: 0.02s
+Using license file /usr/local/gurobi/gurobi.lic
+time spent on set_exogenous_flow: 0.02s
+Using license file /usr/local/gurobi/gurobi.lic
+time spent on set_exogenous_flow: 0.01s
+Using license file /usr/local/gurobi/gurobi.lic
+time spent on set_exogenous_flow: 0.02s
+Using license file /usr/local/gurobi/gurobi.lic
+Set parameter TokenServer to value sccsvc
+Set parameter TokenServer to value sccsvc
+Set parameter TokenServer to value sccsvc
+Set parameter TokenServer to value sccsvc
+Set parameter TokenServer to value sccsvc
+time spent on set_exogenous_flow: 0.02s
+Using license file /usr/local/gurobi/gurobi.lic
+Set parameter TokenServer to value sccsvc
