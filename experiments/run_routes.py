@@ -45,13 +45,13 @@ def plot_routes(G, od, result, ax):
 	#colors = ['r', 'b', 'y', 'orange']
 	tNet.read_node_coordinates('data/pos/'+net+'.txt')
 	#tnet.plot_network(tNet.G, width=0.3)
-	node_color = ['blue' if n in [od[0]] else 'gray' for n in G.nodes()]
+	node_color = ['red' if n in [od[0]] else 'gray' for n in G.nodes()]
 	node_color = ['green' if n in [od[1]] else 'gray' for n in G.nodes()]
 	node_size = [25 if n in [od[0], od[1]] else 0 for n in G.nodes()]
 	l =0
-	plot_network(tNet.G, ax, edge_width=0.1,
+	plot_network(tNet.G, ax, edge_width=0.15,
                      edgecolors='gray', nodecolors=node_color,
-                     nodesize=node_size, arrowsize=0,edge_alpha=0.2)
+                     nodesize=node_size, arrowsize=0,edge_alpha=1)
 	for i, dic in result.items():
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
