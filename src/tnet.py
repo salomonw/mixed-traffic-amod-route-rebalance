@@ -9,6 +9,7 @@ from scipy.special import comb
 from scipy.linalg import block_diag
 import copy
 import time
+import pyproj
 
 class tNet():
     def __init__(self, netFile=None, gFile=None, G=None, g=None, fcoeffs=[1, 0, 0, 0, 0.15, 0]):
@@ -414,7 +415,20 @@ class tNet():
         """
         for i, j in self.G_supergraph.edges():
             self.G_supergraph[i][j]['t_k'] = travel_time(self.G_supergraph, fcoeffs, i, j, G_exogenous=False)
+  
+    def latlong2xy(self):
+        for n in self.G.nodes():
+            self.G.nodes[n]['pos'] = latlong_to_xy(self.G.nodes[n]['pos']) 
+         
+         
 
+def latlong_to_xy(pos):
+    P = pyproj.Proj(proj='utm', zone=18, ellps='clrk66')
+    lat,lon = pos
+    return P(lat,lon)
+        
+
+    
 def plot_network_flows(G, weight='flow', width=3, cmap=plt.cm.Blues):
     # TODO: add explaination
     fig, ax = plt.subplots()

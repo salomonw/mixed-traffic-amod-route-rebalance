@@ -12,7 +12,8 @@ import copy
 
 def read_net(net_name):
     if net_name == 'NYC':
-        tNet, tstamp, fcoeffs = nyc.build_NYC_net('data/net/NYC/', only_road=True)
+        tNet, tstamp, fcoeffs = nyc.build_NYC_net('data/net/NYC/', only_road=False)
+        tNet.read_node_coordinates('data/pos/NYC.txt')
     else:
         netFile, gFile, fcoeffs, tstamp, dir_out = tnet.get_network_parameters(net_name=net_name,
                                                                                experiment_name=net_name + '_n_variation')
@@ -21,7 +22,7 @@ def read_net(net_name):
 
 
 def od_travel_times(tNet, s_flows, od):
-	routes = routeFinder.RouteFinder(tNet.G, tNet.g, s_flows, eps=0.0, od=od)
+	routes = routeFinder.RouteFinder(tNet.G, tNet.g, s_flows, eps=10.0, od=od)
 	rs = {}
 	for i, route in routes.items():
 		rs[i]={'p': route['p'], 'tt':routeFinder.RouteTravelTime(tNet.G,route['r']), 'r':route['r']}
@@ -50,7 +51,7 @@ def plot_routes(G, od, result, ax):
 	l =0
 	plot_network(tNet.G, ax, edge_width=0.2,
                      edgecolors='gray', nodecolors=node_color,
-                     nodesize=node_size, arrowsize=0.2,edge_alpha=1)
+                     nodesize=node_size, arrowsize=0.2,edge_alpha=0.5)
 	for i, dic in result.items():
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
@@ -60,7 +61,7 @@ def plot_routes(G, od, result, ax):
 		arrow_size = [3 if e in r_links else 0 for e in G.edges()]
 		plot_network(tNet.G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors=node_color, 
-			nodesize=node_size, arrowsize=arrow_size,edge_alpha=0.6)
+			nodesize=node_size, arrowsize=arrow_size,edge_alpha=0.7)
 		l+=1
 	return ax
 
@@ -77,9 +78,8 @@ def weighted_avg_and_std(values, weights):
 
 
 
-#netname = 'NYC'
-net = 'EMA_mid'
-g_mul = 2.5
+net = 'NYC'
+g_mul = 2
 
 tNet, fcoeffs = read_net(net)
 #tNet_UC = copy.deepcopy(tNet)
@@ -115,7 +115,7 @@ print(objSO)
 #userRoutes = routeFinder.userRouteFinder(tNet.G, tNet.g, s_flows, eps=0)
 
 #select OD pair
-random.seed(15)
+random.seed(8)
 ods = dict(sorted(tNet.g.items(), key=lambda item: item[1]))
 ods = list(ods.keys())[-30:]
 
@@ -133,9 +133,10 @@ table['WstdTT'] = []
 
 for od in ods:
 	result = od_travel_times(tNet, s_flows, od)
+	print(result)
 	fig, ax = plt.subplots()
 	plot_routes(tNet.G_supergraph, od, result, ax)
-	plt.savefig('plot_'+str(od)+'.pdf')	
+	plt.savefig('plot_'+net+'_'+str(od)+'.pdf')	
 	'''
 	resultUC = od_travel_times(tNet_UC, s_flows_UC, od)
 	print([v['tt'] for k,v in resultUC.items()])
