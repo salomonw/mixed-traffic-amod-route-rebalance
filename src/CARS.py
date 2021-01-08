@@ -379,7 +379,7 @@ def solve_CARSn(tnet, fcoeffs, n=3, exogenous_G=False, rebalancing=True, linear=
 def add_bike_cnstr(m, tnet, xu):
     [m.addConstr(
     	quicksum(xu[(i,j)] for i,l in tnet.G_supergraph.in_edges(nbunch=j)) == quicksum(xu[(j,k)] for l,k in tnet.G_supergraph.out_edges(nbunch=j)))
-    		for j in tnet.G_supergraph.nodes() if 'b' in j]         
+    		for j in tnet.G_supergraph.nodes() if 'b' in str(j)]         
     m.update()
 
 @timeit
