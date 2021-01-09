@@ -322,7 +322,8 @@ def timeit(f):
         return r
     return new_f
 
-
+def get_integers(str_):
+    return ''.join(filter(lambda i: i.isdigit(), str_))
 
 class progressBar:
     def __init__(self, toolbar_width):

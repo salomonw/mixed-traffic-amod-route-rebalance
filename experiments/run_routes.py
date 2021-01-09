@@ -45,11 +45,11 @@ def plot_routes(tNet, od, result, ax):
 	#colors = ['r', 'b', 'y', 'orange']
 	tNet.read_node_coordinates('data/pos/'+net+'.txt')
 	#tnet.plot_network(tNet.G, width=0.3)
-	node_color = ['red' if n in [od[0]] else 'gray' for n in tNet.G.nodes()]
-	node_color = ['green' if n in [od[1]] else 'gray' for n in tNet.G.nodes()]
-	node_size = [25 if n in [od[0], od[1]] else 0.2 for n in tNet.G.nodes()]
+	node_color = ['red' if n in [od[0]] else 'gray' for n in tNet.G_supergraph.nodes()]
+	node_color = ['green' if n in [od[1]] else 'gray' for n in tNet.G_supergraph.nodes()]
+	node_size = [25 if n in [od[0], od[1]] else 0.2 for n in tNet.G_supergraph.nodes()]
 	l =0
-	plot_network(tNet.G, ax, edge_width=1,
+	plot_network(tNet.G_supergraph, ax, edge_width=1,
                      edgecolors='gray', nodecolors=node_color,
                      nodesize=node_size, arrowsize=0.5,edge_alpha=1)
 	for i, dic in result.items():
@@ -77,14 +77,14 @@ def weighted_avg_and_std(values, weights):
     return math.sqrt(variance)
 
 
-
+#net = 'EMA_mid'
 net = 'NYC'
 g_mul = 1
 
 tNet, fcoeffs = read_net(net)
 #tNet_UC = copy.deepcopy(tNet)
 
-#tNet.build_supergraph()
+tNet.build_supergraph()
 g_per = tnet.perturbDemandConstant(tNet.g, g_mul)
 tNet.set_g(g_per)
 
@@ -135,7 +135,7 @@ for od in ods:
 	result = od_travel_times(tNet, s_flows, od)
 	print(result)
 	fig, ax = plt.subplots()
-	plot_routes(tNet.G_supergraph, od, result, ax)
+	plot_routes(tNet, od, result, ax)
 	plt.savefig('plot_'+net+'_'+str(od)+'.pdf')	
 	'''
 	resultUC = od_travel_times(tNet_UC, s_flows_UC, od)

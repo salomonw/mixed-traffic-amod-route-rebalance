@@ -398,6 +398,14 @@ class tNet():
                 x = float(line_[1])
                 y = float(line_[2])
                 self.G.nodes[n]['pos'] = (x, y)
+                self.G_supergraph.nodes[n]['pos'] = (x, y)
+        
+        for node in self.G_supergraph.nodes():
+            if isinstance(node,str):
+                n = int(get_integers(node))
+                self.G_supergraph.nodes[node]['pos']=self.G_supergraph.nodes[n]['pos']
+                    
+                
 
     def set_supergraph_tk(self, fcoeffs, G_exogenous=False):
         """
