@@ -34,22 +34,22 @@ def plot_network(G, ax, width=1, cmap=plt.cm.Blues, edge_width=False,
 	edgecolors=False, nodecolors=False, nodesize=False, arrowsize=False,edge_alpha=1):
     pos = nx.get_node_attributes(G, 'pos')
     nx.draw(G, pos, width=edge_width,  ax=ax, edge_color=edgecolors, node_size=nodesize, node_color=nodecolors,
-    	connectionstyle='arc3, rad=0.04',arrowsize=0, arrowstyle='fancy',alpha=edge_alpha)
+    	connectionstyle='arc3, rad=0.04',arrowsize=0.5, arrowstyle='fancy',alpha=edge_alpha)
 
 
 
-def plot_routes(G, od, result, ax):
+def plot_routes(tNet, od, result, ax):
 	#fig, ax = plt.subplots()
 	cmap = color = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
              for i in range(30)]
 	#colors = ['r', 'b', 'y', 'orange']
 	tNet.read_node_coordinates('data/pos/'+net+'.txt')
 	#tnet.plot_network(tNet.G, width=0.3)
-	node_color = ['red' if n in [od[0]] else 'gray' for n in G.nodes()]
-	node_color = ['green' if n in [od[1]] else 'gray' for n in G.nodes()]
-	node_size = [25 if n in [od[0], od[1]] else 0.2 for n in G.nodes()]
+	node_color = ['red' if n in [od[0]] else 'gray' for n in tNet.G.nodes()]
+	node_color = ['green' if n in [od[1]] else 'gray' for n in tNet.G.nodes()]
+	node_size = [25 if n in [od[0], od[1]] else 0.2 for n in tNet.G.nodes()]
 	l =0
-	plot_network(tNet.G, ax, edge_width=0.8,
+	plot_network(tNet.G, ax, edge_width=1,
                      edgecolors='gray', nodecolors=node_color,
                      nodesize=node_size, arrowsize=0.5,edge_alpha=1)
 	for i, dic in result.items():
@@ -58,7 +58,7 @@ def plot_routes(G, od, result, ax):
 		#for link in r_links:a
 		edge_colors = [cmap[l] if e in r_links else 'gray' for e in tNet.G_supergraph.edges()]
 		edge_width = [2 if e in r_links else 0 for e in tNet.G_supergraph.edges()]
-		arrow_size = [0.8 if e in r_links else 0 for e in tNet.G.edges()]
+		arrow_size = [0.8 if e in r_links else 0 for e in tNet.G_supergraph.edges()]
 		plot_network(tNet.G_supergraph, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors=node_color, 
 			nodesize=node_size, arrowsize=arrow_size,edge_alpha=0.7)
@@ -79,12 +79,12 @@ def weighted_avg_and_std(values, weights):
 
 
 net = 'NYC'
-g_mul = 1.5
+g_mul = 1
 
 tNet, fcoeffs = read_net(net)
 #tNet_UC = copy.deepcopy(tNet)
 
-tNet.build_supergraph(identical_G=True)
+#tNet.build_supergraph()
 g_per = tnet.perturbDemandConstant(tNet.g, g_mul)
 tNet.set_g(g_per)
 
