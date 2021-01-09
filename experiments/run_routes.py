@@ -47,19 +47,19 @@ def plot_routes(G, od, result, ax):
 	#tnet.plot_network(tNet.G, width=0.3)
 	node_color = ['red' if n in [od[0]] else 'gray' for n in G.nodes()]
 	node_color = ['green' if n in [od[1]] else 'gray' for n in G.nodes()]
-	node_size = [25 if n in [od[0], od[1]] else 0 for n in G.nodes()]
+	node_size = [25 if n in [od[0], od[1]] else 0.2 for n in G.nodes()]
 	l =0
 	plot_network(tNet.G, ax, edge_width=0.8,
                      edgecolors='gray', nodecolors=node_color,
-                     nodesize=node_size, arrowsize=0.2,edge_alpha=1)
+                     nodesize=node_size, arrowsize=0.5,edge_alpha=1)
 	for i, dic in result.items():
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
-		#for link in r_links:
-		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
-		edge_width = [2 if e in r_links else 0 for e in G.edges()]
-		arrow_size = [0.8 if e in r_links else 0 for e in G.edges()]
-		plot_network(tNet.G, ax, edge_width=edge_width, 
+		#for link in r_links:a
+		edge_colors = [cmap[l] if e in r_links else 'gray' for e in tNet.G_supergraph.edges()]
+		edge_width = [2 if e in r_links else 0 for e in tNet.G_supergraph.edges()]
+		arrow_size = [0.8 if e in r_links else 0 for e in tNet.G.edges()]
+		plot_network(tNet.G_supergraph, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors=node_color, 
 			nodesize=node_size, arrowsize=arrow_size,edge_alpha=0.7)
 		l+=1
@@ -79,7 +79,7 @@ def weighted_avg_and_std(values, weights):
 
 
 net = 'NYC'
-g_mul = 2
+g_mul = 1.5
 
 tNet, fcoeffs = read_net(net)
 #tNet_UC = copy.deepcopy(tNet)
@@ -117,7 +117,7 @@ print(objSO)
 #select OD pair
 random.seed(2)
 ods = dict(tNet.g.items(), key=lambda item: item[1])
-ods = list(ods.keys())[-30:]
+ods = list(ods.keys())[-3:]
 
 table = {}
 table['od'] = []
