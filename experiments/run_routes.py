@@ -22,10 +22,10 @@ def read_net(net_name):
 
 
 def od_travel_times(tNet, s_flows, od):
-	routes = routeFinder.RouteFinder(tNet.G, tNet.g, s_flows, eps=10.0, od=od)
+	routes = routeFinder.RouteFinder(tNet.G_supergraph, tNet.g, s_flows, eps=10.0, od=od)
 	rs = {}
 	for i, route in routes.items():
-		rs[i]={'p': route['p'], 'tt':routeFinder.RouteTravelTime(tNet.G,route['r']), 'r':route['r']}
+		rs[i]={'p': route['p'], 'tt':routeFinder.RouteTravelTime(tNet.G_supergraph,route['r']), 'r':route['r']}
 	return rs
 
 
