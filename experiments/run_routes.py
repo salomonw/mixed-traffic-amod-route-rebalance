@@ -51,14 +51,14 @@ def plot_routes(G, od, result, ax):
 	l =0
 	plot_network(tNet.G, ax, edge_width=0.15,
                      edgecolors='gray', nodecolors=node_color,
-                     nodesize=node_size, arrowsize=0,edge_alpha=1)
+                     nodesize=node_size, arrowsize=0.1,edge_alpha=1)
 	for i, dic in result.items():
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
 		#for link in r_links:
 		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
 		edge_width = [2 if e in r_links else 0 for e in G.edges()]
-		arrow_size = [0 if e in r_links else 0 for e in G.edges()]
+		arrow_size = [0.1 if e in r_links else 0 for e in G.edges()]
 		plot_network(tNet.G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors=node_color, 
 			nodesize=node_size, arrowsize=arrow_size,edge_alpha=0.7)

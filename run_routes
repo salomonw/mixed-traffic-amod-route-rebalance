@@ -1,0 +1,15 @@
+#!/bin/bash -l
+
+#$ -P noc-lab
+#$ -N Routes
+#$ -j y
+#$ -m bae
+#$ -pe omp 24
+#$ -l h_rt=17:59:00
+
+# Load Modules
+module load python3
+module load gurobi
+
+# Run program
+python3 -m experiments.run_routes
