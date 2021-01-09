@@ -49,7 +49,7 @@ def plot_routes(G, od, result, ax):
 	node_color = ['green' if n in [od[1]] else 'gray' for n in G.nodes()]
 	node_size = [25 if n in [od[0], od[1]] else 0 for n in G.nodes()]
 	l =0
-	plot_network(tNet.G, ax, edge_width=0.15,
+	plot_network(tNet.G, ax, edge_width=0.5,
                      edgecolors='gray', nodecolors=node_color,
                      nodesize=node_size, arrowsize=0.1,edge_alpha=1)
 	for i, dic in result.items():
