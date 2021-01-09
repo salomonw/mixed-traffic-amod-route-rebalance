@@ -173,3 +173,49 @@ Set parameter TokenServer to value sccsvc
 time spent on set_exogenous_flow: 0.04s
 Using license file /usr/local/gurobi/gurobi.lic
 Set parameter TokenServer to value sccsvc
+time spent on get_obj_CARSn: 6.22s
+time spent on add_epsilon_cnstr: 2.67s
+time spent on add_demand_cnstr: 17.51s
+time spent on add_rebalancing_cnstr: 0.49s
+time spent on set_optimal_flows: 8.72s
+time spent on solve_bush_CARSn: 417.73s
+time spent on set_exogenous_flow: 0.08s
+time spent on get_obj_CARSn: 6.07s
+time spent on add_epsilon_cnstr: 2.62s
+time spent on add_demand_cnstr: 17.46s
+time spent on add_rebalancing_cnstr: 0.53s
+time spent on set_optimal_flows: 20.64s
+time spent on solve_bush_CARSn: 13707.85s
+0
+max flow:4.97
+time spent on set_exogenous_flow: 0.33s
+time spent on get_obj_CARSn: 35.60s
+time spent on add_epsilon_cnstr: 16.57s
+time spent on add_demand_cnstr: 108.11s
+time spent on set_optimal_flows: 20.27s
+time spent on solve_bush_CARSn: 749.15s
+time spent on set_exogenous_flow: 0.87s
+time spent on get_obj_CARSn: 23.64s
+time spent on add_epsilon_cnstr: 11.44s
+time spent on add_demand_cnstr: 88.06s
+time spent on add_rebalancing_cnstr: 2.86s
+time spent on set_optimal_flows: 22.32s
+time spent on solve_bush_CARSn: 12013.93s
+1
+max flow:4.74
+time spent on set_exogenous_flow: 0.42s
+time spent on get_obj_CARSn: 38.13s
+time spent on add_epsilon_cnstr: 15.45s
+time spent on add_demand_cnstr: 99.76s
+time spent on set_optimal_flows: 23.94s
+time spent on solve_bush_CARSn: 827.99s
+time spent on set_exogenous_flow: 0.46s
+time spent on get_obj_CARSn: 33.72s
+time spent on add_epsilon_cnstr: 15.16s
+time spent on add_demand_cnstr: 99.15s
+time spent on add_rebalancing_cnstr: 2.97s
+time spent on set_optimal_flows: 23.75s
+time spent on solve_bush_CARSn: 6885.24s
+2
+max flow:4.71
+0.1

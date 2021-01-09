@@ -84,7 +84,7 @@ g_mul = 1
 tNet, fcoeffs = read_net(net)
 #tNet_UC = copy.deepcopy(tNet)
 
-tNet.build_supergraph()
+#tNet.build_supergraph()
 g_per = tnet.perturbDemandConstant(tNet.g, g_mul)
 tNet.set_g(g_per)
 
@@ -102,13 +102,13 @@ tNet, runtime, s_flows = cars.solve_bush_CARSn(tNet, fcoeffs=fcoeffs, n=8,
 #                                                linear=False, bush=True, userCentric=True)
 
 
-cars.supergraph2G(tNet)
+#cars.supergraph2G(tNet)
 #cars.supergraph2G(tNet_UC)
 
-objSO = sum([tNet.G[i][j]['flow']*tNet.G[i][j]['t_k'] for i,j in tNet.G.edges()])
+#objSO = sum([tNet.G[i][j]['flow']*tNet.G[i][j]['t_k'] for i,j in tNet.G.edges()])
 #objUC = sum([tNet_UC.G[i][j]['flow']*tNet_UC.G[i][j]['t_k'] for i,j in tNet_UC.G.edges()])
 
-print(objSO)
+#print(objSO)
 #print(objUC)
 #print(objUC/objSO)
 #rebRoutes = routeFinder.rebRouteFinder(tNet.G, eps=0)
