@@ -49,16 +49,16 @@ def plot_routes(G, od, result, ax):
 	node_color = ['green' if n in [od[1]] else 'gray' for n in G.nodes()]
 	node_size = [25 if n in [od[0], od[1]] else 0 for n in G.nodes()]
 	l =0
-	plot_network(tNet.G, ax, edge_width=0.5,
+	plot_network(tNet.G, ax, edge_width=0.8,
                      edgecolors='gray', nodecolors=node_color,
-                     nodesize=node_size, arrowsize=0.1,edge_alpha=1)
+                     nodesize=node_size, arrowsize=0.2,edge_alpha=1)
 	for i, dic in result.items():
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
 		#for link in r_links:
 		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
 		edge_width = [2 if e in r_links else 0 for e in G.edges()]
-		arrow_size = [0.1 if e in r_links else 0 for e in G.edges()]
+		arrow_size = [0.8 if e in r_links else 0 for e in G.edges()]
 		plot_network(tNet.G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors=node_color, 
 			nodesize=node_size, arrowsize=arrow_size,edge_alpha=0.7)
