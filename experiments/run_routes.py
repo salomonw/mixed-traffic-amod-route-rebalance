@@ -42,16 +42,16 @@ def plot_routes(tNet, od, result, ax):
 	#fig, ax = plt.subplots()
 	cmap = color = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
              for i in range(30)]
-	#colors = ['r', 'b', 'y', 'orange']
+	cmap = ['b','m','y','c','g', 'r']  
 	tNet.read_node_coordinates('data/pos/'+net+'.txt')
 	#tnet.plot_network(tNet.G, width=0.3)
-	node_color = ['red' if n in [od[0]] else 'gray' for n in tNet.G_supergraph.nodes()]
-	node_color = ['green' if n in [od[1]] else 'gray' for n in tNet.G_supergraph.nodes()]
-	node_size = [25 if n in [od[0], od[1]] else 0.2 for n in tNet.G_supergraph.nodes()]
+	node_color = ['red' if n in [od[0]] else ('green' if n in [od[1]] else 'gray') for n in tNet.G.nodes()]
+	#node_color = ['green' if n in [od[1]] else 'gray' for n in tNet.G_supergraph.nodes()]
+	node_size = [25 if n in [od[0], od[1]] else 0.2 for n in tNet.G.nodes()]
 	l =0
-	plot_network(tNet.G_supergraph, ax, edge_width=1,
+	plot_network(tNet.G, ax, edge_width=1,
                      edgecolors='gray', nodecolors=node_color,
-                     nodesize=node_size, arrowsize=0.5,edge_alpha=1)
+                     nodesize=node_size, arrowsize=0.3,edge_alpha=1)
 	for i, dic in result.items():
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
@@ -59,9 +59,16 @@ def plot_routes(tNet, od, result, ax):
 		edge_colors = [cmap[l] if e in r_links else 'gray' for e in tNet.G_supergraph.edges()]
 		edge_width = [2 if e in r_links else 0 for e in tNet.G_supergraph.edges()]
 		arrow_size = [0.8 if e in r_links else 0 for e in tNet.G_supergraph.edges()]
+		linkstyle = ['solid' if e[2]['type']=='r' else ('dashed' if e[2]['type']=='p'
+        #'''
+                                                     else 'dashed' if e[2]['type']=="'"
+                                                     else 'dashdot' if e[2]['type']=='b'
+                                                     else 'dotted' if e[2]['type']=='s'
+                                                     else 'solid') for e in tNet.G_supergraph.edges(data=True)]
+        #'''
 		plot_network(tNet.G_supergraph, ax, edge_width=edge_width, 
-			edgecolors=edge_colors, nodecolors=node_color, 
-			nodesize=node_size, arrowsize=arrow_size,edge_alpha=0.7)
+			edgecolors=edge_colors, nodecolors='gray', 
+			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7)
 		l+=1
 	return ax
 
@@ -79,16 +86,16 @@ def weighted_avg_and_std(values, weights):
 
 #net = 'EMA_mid'
 net = 'NYC'
-g_mul = 1
+g_mul = 2
 
 tNet, fcoeffs = read_net(net)
 #tNet_UC = copy.deepcopy(tNet)
 
-#tNet.build_supergraph()
+tNet.build_supergraph()
 g_per = tnet.perturbDemandConstant(tNet.g, g_mul)
 tNet.set_g(g_per)
 
-
+#print(set([e[2]['type'] for e in tNet.G_supergraph.edges(data=True)]))
 #tNet_UC.build_supergraph(identical_G=True)
 #g_per = tnet.perturbDemandConstant(tNet_UC.g, g_mul)
 #tNet_UC.set_g(g_per)
@@ -115,7 +122,7 @@ tNet, runtime, s_flows = cars.solve_bush_CARSn(tNet, fcoeffs=fcoeffs, n=8,
 #userRoutes = routeFinder.userRouteFinder(tNet.G, tNet.g, s_flows, eps=0)
 
 #select OD pair
-random.seed(2)
+random.seed(3)
 ods = dict(tNet.g.items(), key=lambda item: item[1])
 ods = list(ods.keys())[-3:]
 
@@ -136,6 +143,7 @@ for od in ods:
 	print(result)
 	fig, ax = plt.subplots()
 	plot_routes(tNet, od, result, ax)
+	plt.show()
 	plt.savefig('plot_'+net+'_'+str(od)+'.pdf')	
 	'''
 	resultUC = od_travel_times(tNet_UC, s_flows_UC, od)

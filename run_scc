@@ -4,8 +4,8 @@
 #$ -N RR
 #$ -j y
 #$ -m bae
-#$ -pe omp 24
-#$ -l h_rt=37:59:00
+#$ -pe omp 36
+#$ -l h_rt=80:59:00
 
 # Load Modules
 module load python3
@@ -43,11 +43,11 @@ module load gurobi
 #python3 -m experiments.run_penRate_intermodal_journal NYC 2 AS True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 2 ASB True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 2 ASP True
-#python3 -m experiments.run_penRate_intermodal_journal NYC 2 ASPB True
+python3 -m experiments.run_penRate_intermodal_journal NYC 2 ASPB True
 
 #python3 -m experiments.run_penRate_intermodal_journal NYC 4 A True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 4 AS True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASB True
 #python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASP True
-python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASPB True
+#python3 -m experiments.run_penRate_intermodal_journal NYC 4 ASPB True
 
