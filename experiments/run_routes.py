@@ -123,9 +123,10 @@ tNet, runtime, s_flows = cars.solve_bush_CARSn(tNet, fcoeffs=fcoeffs, n=8,
 #userRoutes = routeFinder.userRouteFinder(tNet.G, tNet.g, s_flows, eps=0)
 
 #select OD pair
-random.seed(3)
+random.seed(9)
 ods = dict(tNet.g.items(), key=lambda item: item[1])
-ods = list(ods.keys())[-3:]
+ods = list(ods.keys())[-8:]
+random.shuffle(ods)
 
 table = {}
 table['od'] = []
