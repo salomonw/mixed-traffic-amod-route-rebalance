@@ -40,9 +40,10 @@ def plot_network(G, ax, width=1, cmap=plt.cm.Blues, edge_width=False,
 
 def plot_routes(tNet, od, result, ax):
 	#fig, ax = plt.subplots()
-	cmap = color = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+	cmap2 = color = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
              for i in range(30)]
 	cmap = ['b','m','y','c','g', 'r']  
+	cmap.extend(cmap2)
 	tNet.read_node_coordinates('data/pos/'+net+'.txt')
 	#tnet.plot_network(tNet.G, width=0.3)
 	node_color = ['red' if n in [od[0]] else ('green' if n in [od[1]] else 'gray') for n in tNet.G.nodes()]
@@ -86,15 +87,15 @@ def weighted_avg_and_std(values, weights):
 
 #net = 'EMA_mid'
 net = 'NYC'
-g_mul = 2
+g_mul = 1.5
 
 tNet, fcoeffs = read_net(net)
 #tNet_UC = copy.deepcopy(tNet)
 
-tNet.build_supergraph()
+#tNet.build_supergraph()
 g_per = tnet.perturbDemandConstant(tNet.g, g_mul)
 tNet.set_g(g_per)
-
+    
 #print(set([e[2]['type'] for e in tNet.G_supergraph.edges(data=True)]))
 #tNet_UC.build_supergraph(identical_G=True)
 #g_per = tnet.perturbDemandConstant(tNet_UC.g, g_mul)
