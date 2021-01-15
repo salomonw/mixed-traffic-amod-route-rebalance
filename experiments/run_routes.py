@@ -125,7 +125,7 @@ tNet, runtime, s_flows = cars.solve_bush_CARSn(tNet, fcoeffs=fcoeffs, n=8,
 #select OD pair
 random.seed(9)
 ods = dict(tNet.g.items(), key=lambda item: item[1])
-ods = list(ods.keys())[-8:]
+ods = list(ods.keys())[-50:]
 random.shuffle(ods)
 
 table = {}
