@@ -124,9 +124,10 @@ tNet, runtime, s_flows = cars.solve_bush_CARSn(tNet, fcoeffs=fcoeffs, n=8,
 
 #select OD pair
 random.seed(9)
-ods = dict(tNet.g.items(), key=lambda item: item[1])
-ods = list(ods.keys())[-50:]
+ods = list(tNet.g.keys())#, key=lambda item: item[1])
 random.shuffle(ods)
+ods = list(ods.keys())[-50:]
+
 
 table = {}
 table['od'] = []
@@ -145,7 +146,7 @@ for od in ods:
 	print(result)
 	fig, ax = plt.subplots()
 	plot_routes(tNet, od, result, ax)
-	plt.show()
+	#plt.show()
 	plt.savefig('plot_'+net+'_'+str(od)+'.pdf')	
 	'''
 	resultUC = od_travel_times(tNet_UC, s_flows_UC, od)
