@@ -32,10 +32,10 @@ def od_travel_times(tNet, s_flows, od):
 
 
 def plot_network(G, ax, width=1, cmap=plt.cm.Blues, edge_width=False, 
-	edgecolors=False, nodecolors=False, nodesize=False, arrowsize=False,edge_alpha=1):
+	edgecolors=False, nodecolors=False, nodesize=False, arrowsize=False,edge_alpha=1,linkstyle=False ):
     pos = nx.get_node_attributes(G, 'pos')
     nx.draw(G, pos, width=edge_width,  ax=ax, edge_color=edgecolors, node_size=nodesize, node_color=nodecolors,
-    	connectionstyle='arc3, rad=0.04',arrowsize=0.5, arrowstyle='fancy',alpha=edge_alpha)
+    	connectionstyle='arc3, rad=0.04',arrowsize=0.5, arrowstyle='fancy',alpha=edge_alpha, style=linkstyle)
 
 
 
@@ -53,7 +53,7 @@ def plot_routes(tNet, od, result, ax):
 	l =0
 	plot_network(tNet.G, ax, edge_width=1,
                      edgecolors='gray', nodecolors=node_color,
-                     nodesize=node_size, arrowsize=0.3,edge_alpha=1)
+                     nodesize=node_size, arrowsize=0.1,edge_alpha=1)
 	for i, dic in result.items():
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
@@ -70,7 +70,7 @@ def plot_routes(tNet, od, result, ax):
         #'''
 		plot_network(tNet.G_supergraph, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors='gray', 
-			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7)
+			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, linkstyle=linkstyle)
 		l+=1
 	return ax
 
