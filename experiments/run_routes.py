@@ -12,7 +12,8 @@ import copy
 
 def read_net(net_name):
     if net_name == 'NYC':
-        tNet, tstamp, fcoeffs = nyc.build_NYC_net('data/net/NYC/', only_road=False)
+        tNet, tstamp, fcoeffs = nyc.build_NYC_net('data/net/NYC/', only_road=True)
+        tNet.build_supergraph(identical_G=True)
         tNet.read_node_coordinates('data/pos/NYC.txt')
     else:
         netFile, gFile, fcoeffs, tstamp, dir_out = tnet.get_network_parameters(net_name=net_name,
@@ -89,45 +90,33 @@ def weighted_avg_and_std(values, weights):
 net = 'NYC'
 g_mul = 1.5
 
+# add road network
 tNet, fcoeffs = read_net(net)
-#tNet_UC = copy.deepcopy(tNet)
+# add biking layer
+tNet.build_layer(one_way=True, avg_speed=6,capacity=99999, symb="b", identical_G=False)
+# add pedestrian network
+tNet.build_layer(one_way=False, avg_speed=3.1, capacity=99999, symb="'", identical_G=False)
+# add subway for nyc
+layer = tnet.readNetFile(netFile='data/net/NYC/NYC_M_Subway_net.txt')
+tNet.add_layer(layer=layer, layer_symb='s')
 
-#tNet.build_supergraph()
+# set demand
 g_per = tnet.perturbDemandConstant(tNet.g, g_mul)
 tNet.set_g(g_per)
-    
-#print(set([e[2]['type'] for e in tNet.G_supergraph.edges(data=True)]))
-#tNet_UC.build_supergraph(identical_G=True)
-#g_per = tnet.perturbDemandConstant(tNet_UC.g, g_mul)
-#tNet_UC.set_g(g_per)
 
+# solve CARS model
 tNet, runtime, s_flows = cars.solve_bush_CARSn(tNet, fcoeffs=fcoeffs, n=8,
                                                 exogenous_G=False, rebalancing=False,
                                                 linear=False, bush=True)
 
-#tNet_UC, runtime, s_flows_UC = cars.solve_bush_CARSn(tNet_UC, fcoeffs=fcoeffs, n=8,
-#                                                exogenous_G=False, rebalancing=False,
-#                                                linear=False, bush=True, userCentric=True)
-
-
-#cars.supergraph2G(tNet)
-#cars.supergraph2G(tNet_UC)
-
-#objSO = sum([tNet.G[i][j]['flow']*tNet.G[i][j]['t_k'] for i,j in tNet.G.edges()])
-#objUC = sum([tNet_UC.G[i][j]['flow']*tNet_UC.G[i][j]['t_k'] for i,j in tNet_UC.G.edges()])
-
-#print(objSO)
-#print(objUC)
-#print(objUC/objSO)
-#rebRoutes = routeFinder.rebRouteFinder(tNet.G, eps=0)
-#userRoutes = routeFinder.userRouteFinder(tNet.G, tNet.g, s_flows, eps=0)
 
 #select OD pair
-random.seed(9)
-ods = list(tNet.g.keys())#, key=lambda item: item[1])
-random.shuffle(ods)
-ods = list(ods.keys())[-50:]
+#random.seed(9)
+#ods = list(tNet.g.keys())#, key=lambda item: item[1])
+#random.shuffle(ods)
+#ods = list(ods.keys())[-50:]
 
+ods = [(269,546), (1034,899), (1034,958)]
 
 table = {}
 table['od'] = []

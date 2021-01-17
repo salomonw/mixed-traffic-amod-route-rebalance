@@ -54,9 +54,8 @@ def plot_costPenRate(fname, ax, parameters, k):
 	ax.set_xlabel('Penetration Rate')
 	ax.set_ylabel('Avg. Travel Time (min)')
 	ax.set_xlim((0, 1))
-	ax.legend(framealpha=0.8, fontsize='small', frameon=True)
-	#plt.legend(frameon=True)
-	#plt.tight_layout()
+	ax.legend(framealpha=0.8, fontsize='small', frameon=True, facecolor='w', fancybox='False')
+	#ax.legend.get_frame().set_linewidth(0.2)
 	return ax
 
 
@@ -83,9 +82,8 @@ def plot_flowPenRate(fname, ax, parameters):
 	ax.set_xlabel('Penetration rate')
 	ax.set_xticks(x)
 	ax.set_xticklabels(x_name)
-	ax.legend(framealpha=0.8, fontsize='small', frameon=True, loc=3)
-	#plt.legend(frameon=True)
-	#plt.tight_layout()
+	ax.legend(framealpha=0.8, fontsize='small', frameon=True, loc=3, facecolor='w', fancybox='False')
+	#ax.legend.get_frame().set_linewidth(0.2)
 	return ax
 
 '''
@@ -123,7 +121,7 @@ def plot_comparison(fnames, out):
 			plot_costPenRate(fname, ax[j,0], parameters, 'B')
 		plot_flowPenRate(fname, ax[j,1], parameters)
 		j  +=1
-	plt.legend(frameon=True)
+	#plt.legend(frameon=True, fancybox=False)
 	plt.tight_layout()
 	plt.savefig(out+'.pdf')
 	#plt.show()
@@ -160,9 +158,9 @@ plot_comparison(fnames,'2c')
 
 one = '2021-01-08_11/50/08_penRate_NYC_1.0ASPB_Reb_True'.replace('/', ':')
 two = '2021-01-08_11/51/44_penRate_NYC_1.5ASPB_Reb_True'.replace('/', ':')
-#three = '2021-01-08_11/51/44_penRate_NYC_2.0A_Reb_True'
-#four = '2021-01-08_11/51/44_penRate_NYC_4.0A_Reb_True'
-fnames = [one, two]
+three = '2021-01-12_00:58:41_penRate_NYC_2.0ASPB_Reb_True'.replace('/', ':')
+four = '2021-01-14_02:00:28_penRate_NYC_4.0ASPB_Reb_True'.replace('/', ':')
+fnames = [one, two, three, four]
 
 plot_comparison(fnames,'4c')
 
