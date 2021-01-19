@@ -32,16 +32,31 @@ def od_travel_times(tNet, s_flows, od):
 
 
 def plot_network(G, ax, width=1, cmap=plt.cm.Blues, edge_width=False, 
-	edgecolors=False, nodecolors=False, nodesize=False, arrowsize=False,edge_alpha=1,linkstyle=False ):
+	edgecolors=False, nodecolors=False, nodesize=False, arrowsize=False,edge_alpha=1,linkstyle='-' ):
     pos = nx.get_node_attributes(G, 'pos')
-    nx.draw(G, pos, width=edge_width,  ax=ax, edge_color=edgecolors, node_size=nodesize, node_color=nodecolors,
-    	connectionstyle='arc3, rad=0.04',arrowsize=0.5, arrowstyle='fancy',alpha=edge_alpha, style=linkstyle)
-
+    if linkstyle == '-':
+        nx.draw(G, pos, 
+                width=edge_width,  
+                ax=ax, 
+                edge_color=edgecolors, 
+                node_size=nodesize, 
+                node_color=nodecolors,
+                #connectionstyle='arc3, rad=0.04',
+                arrowsize=0.5, 
+                arrowstyle='fancy',
+                alpha=edge_alpha)
+    else:
+        nx.draw(G, pos, width=edge_width,  
+                ax=ax, edge_color=edgecolors, 
+                node_size=nodesize, node_color=nodecolors,
+                #connectionstyle='arc3, rad=0.04',
+                arrowsize=0.5, arrowstyle='fancy',
+                alpha=edge_alpha, style=linkstyle)
 
 
 def plot_routes(tNet, od, result, ax):
 	#fig, ax = plt.subplots()
-	cmap2 = color = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+	cmap2 =  ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
              for i in range(30)]
 	cmap = ['b','m','y','c','g', 'r']  
 	cmap.extend(cmap2)
@@ -51,26 +66,65 @@ def plot_routes(tNet, od, result, ax):
 	#node_color = ['green' if n in [od[1]] else 'gray' for n in tNet.G_supergraph.nodes()]
 	node_size = [25 if n in [od[0], od[1]] else 0.2 for n in tNet.G.nodes()]
 	l =0
-	plot_network(tNet.G, ax, edge_width=1,
+	plot_network(tNet.G, ax, edge_width=0.35,
                      edgecolors='gray', nodecolors=node_color,
-                     nodesize=node_size, arrowsize=0.1,edge_alpha=1)
+                     nodesize=node_size, arrowsize=0.15,edge_alpha=0.7)
+    
 	for i, dic in result.items():
+		print(i)
 		r = dic['r']
 		r_links = [(r[n],r[n+1]) for n in range(len(r)-1)]
-		#for link in r_links:a
-		edge_colors = [cmap[l] if e in r_links else 'gray' for e in tNet.G_supergraph.edges()]
-		edge_width = [2 if e in r_links else 0 for e in tNet.G_supergraph.edges()]
-		arrow_size = [0.8 if e in r_links else 0 for e in tNet.G_supergraph.edges()]
-		linkstyle = ['solid' if e[2]['type']=='r' else ('dashed' if e[2]['type']=='p'
-        #'''
-                                                     else 'dashed' if e[2]['type']=="'"
-                                                     else 'dashdot' if e[2]['type']=='b'
-                                                     else 'dotted' if e[2]['type']=='s'
-                                                     else 'solid') for e in tNet.G_supergraph.edges(data=True)]
-        #'''
-		plot_network(tNet.G_supergraph, ax, edge_width=edge_width, 
+		G_ = tNet.G_supergraph.edge_subgraph(r_links)
+        
+		edges = ((edge[0],edge[1]) for edge in G_.edges(data=True) if edge[2]['type']=="'")	
+		G = G_.edge_subgraph(edges)
+		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
+		edge_width = [2 if e in r_links else 0 for e in G.edges()]
+		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
+		plot_network(G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors='gray', 
-			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, linkstyle=linkstyle)
+			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, 
+            linkstyle='-.')
+
+		edges = ((edge[0],edge[1]) for edge in G_.edges(data=True) if edge[2]['type']=="s")
+		G = G_.edge_subgraph(edges)
+		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
+		edge_width = [1 if e in r_links else 0 for e in G.edges()]
+		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
+		plot_network(G, ax, edge_width=edge_width, 
+			edgecolors=edge_colors, nodecolors='gray', 
+			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, 
+            linkstyle='--')        
+        
+		edges = ((edge[0],edge[1]) for edge in G_.edges(data=True) if edge[2]['type']=="b")
+		G = G_.edge_subgraph(edges)
+		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
+		edge_width = [5 if e in r_links else 0 for e in G.edges()]
+		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
+		plot_network(G, ax, edge_width=edge_width, 
+			edgecolors=edge_colors, nodecolors='gray', 
+			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, 
+			linkstyle=(0, (1, 10)))
+        
+		edges = ((edge[0],edge[1]) for edge in G_.edges(data=True) if edge[2]['type']=="p")
+		G = G_.edge_subgraph(edges)
+		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
+		edge_width = [2 if e in r_links else 0 for e in G.edges()]
+		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
+		plot_network(G, ax, edge_width=edge_width, 
+			edgecolors=edge_colors, nodecolors='gray', 
+			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, 
+            linkstyle='-.')
+        
+		edges = ((edge[0],edge[1]) for edge in G_.edges(data=True) if edge[2]['type']==0)
+		G = G_.edge_subgraph(edges)
+		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
+		edge_width = [2 if e in r_links else 0 for e in G.edges()]
+		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
+		plot_network(G, ax, edge_width=edge_width, 
+			edgecolors=edge_colors, nodecolors='gray', 
+			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, 
+            linkstyle='-')
 		l+=1
 	return ax
 
@@ -111,12 +165,12 @@ tNet, runtime, s_flows = cars.solve_bush_CARSn(tNet, fcoeffs=fcoeffs, n=8,
 
 
 #select OD pair
-#random.seed(9)
-#ods = list(tNet.g.keys())#, key=lambda item: item[1])
-#random.shuffle(ods)
-#ods = list(ods.keys())[-50:]
+random.seed(20)
+ods = list(tNet.g.keys())
+random.shuffle(ods)
+ods = list(ods)[-50:]
 
-ods = [(269,546), (1034,899), (1034,958)]
+#ods = [(269,546), (1034,899), (1034,958)]
 
 table = {}
 table['od'] = []
@@ -132,7 +186,7 @@ table['WstdTT'] = []
 
 for od in ods:
 	result = od_travel_times(tNet, s_flows, od)
-	print(result)
+	#print(result)
 	fig, ax = plt.subplots()
 	plot_routes(tNet, od, result, ax)
 	#plt.show()

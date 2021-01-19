@@ -69,16 +69,20 @@ def plot_flowPenRate(fname, ax, parameters):
 	             bottom=nonCavsFlow, label='AMoD')
 	p3 = ax.bar(x, rebalancingFlow, width,
 	             bottom=[cavsFlow[i] + nonCavsFlow[i] for i in range(len(cavsFlow))], label='Rebalancing')
-	p4 = ax.bar(x, pedestrianFlow, width,
-	             bottom=[cavsFlow[i] + nonCavsFlow[i] + rebalancingFlow[i] for i in range(len(cavsFlow))], label='Pedestrian')
-	p5 = ax.bar(x, bikeFlow, width,
-	             bottom=[cavsFlow[i] + nonCavsFlow[i] + rebalancingFlow[i] + pedestrianFlow[i] for i in
-	                     range(len(cavsFlow))], label='Biking')
-	p6 = ax.bar(x, subwayFlow, width,
+	if sum(subwayFlow)>10:
+		p6 = ax.bar(x, subwayFlow, width,
 	             bottom=[cavsFlow[i] + nonCavsFlow[i] + rebalancingFlow[i] + pedestrianFlow[i] + bikeFlow[i] for i in
 	                     range(len(cavsFlow))], label='Subway')
+	if sum(pedestrianFlow)>10:
+		p4 = ax.bar(x, pedestrianFlow, width,
+	             bottom=[cavsFlow[i] + nonCavsFlow[i] + rebalancingFlow[i] for i in range(len(cavsFlow))], label='Pedestrian')
+	if sum(bikeFlow)>10:
+		p5 = ax.bar(x, bikeFlow, width,
+	             bottom=[cavsFlow[i] + nonCavsFlow[i] + rebalancingFlow[i] + pedestrianFlow[i] for i in
+	                     range(len(cavsFlow))], label='Biking')
 
-	ax.set_ylabel('Flow * Distance')
+
+	ax.set_ylabel('Miles per mode of transport')
 	ax.set_xlabel('Penetration rate')
 	ax.set_xticks(x)
 	ax.set_xticklabels(x_name)
@@ -164,7 +168,13 @@ fnames = [one, two, three, four]
 
 plot_comparison(fnames,'4c')
 
+one = '2021-01-08_11/51/44_penRate_NYC_2.0A_Reb_True'.replace('/', ':')
+two = '2021-01-08_11/51/44_penRate_NYC_2.0AS_Reb_True'.replace('/', ':')
+three = '2021-01-08_11/51/44_penRate_NYC_2.0ASP_Reb_True'.replace('/', ':')
+four = '2021-01-12_00:58:41_penRate_NYC_2.0ASPB_Reb_True'.replace('/', ':')
+fnames = [one, two, three, four]
 
+plot_comparison(fnames,'4c')
 
 
 
