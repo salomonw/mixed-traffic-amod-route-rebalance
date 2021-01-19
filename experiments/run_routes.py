@@ -83,7 +83,7 @@ def plot_routes(tNet, od, result, ax):
 		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
 		plot_network(G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors='gray', 
-			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, 
+			nodesize=0.0, arrowsize=arrow_size,edge_alpha=0.7, 
             linkstyle='-.')
 
 		edges = ((edge[0],edge[1]) for edge in G_.edges(data=True) if edge[2]['type']=="s")
@@ -93,13 +93,13 @@ def plot_routes(tNet, od, result, ax):
 		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
 		plot_network(G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors='gray', 
-			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, 
+			nodesize=0.0, arrowsize=arrow_size,edge_alpha=0.7, 
             linkstyle='--')        
         
 		edges = ((edge[0],edge[1]) for edge in G_.edges(data=True) if edge[2]['type']=="b")
 		G = G_.edge_subgraph(edges)
 		edge_colors = [cmap[l] if e in r_links else 'gray' for e in G.edges()]
-		edge_width = [5 if e in r_links else 0 for e in G.edges()]
+		edge_width = [0.5 if e in r_links else 0 for e in G.edges()]
 		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
 		plot_network(G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors='gray', 
@@ -113,7 +113,7 @@ def plot_routes(tNet, od, result, ax):
 		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
 		plot_network(G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors='gray', 
-			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, 
+			nodesize=0.0, arrowsize=arrow_size,edge_alpha=0.7, 
             linkstyle='-.')
         
 		edges = ((edge[0],edge[1]) for edge in G_.edges(data=True) if edge[2]['type']==0)
@@ -123,7 +123,7 @@ def plot_routes(tNet, od, result, ax):
 		arrow_size = [1 if e in r_links else 0 for e in G.edges()]
 		plot_network(G, ax, edge_width=edge_width, 
 			edgecolors=edge_colors, nodecolors='gray', 
-			nodesize=0.1, arrowsize=arrow_size,edge_alpha=0.7, 
+			nodesize=0.0, arrowsize=arrow_size,edge_alpha=0.7, 
             linkstyle='-')
 		l+=1
 	return ax

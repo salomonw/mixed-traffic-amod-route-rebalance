@@ -1,0 +1,450 @@
+time spent on set_exogenous_flow: 0.06s
+Using license file /usr/local/gurobi/gurobi.lic
+Set parameter TokenServer to value sccsvc
+/usr3/graduate/salomonw/Github/mixed-traffic-amod-route-rebalance/experiments/run_routes.py:190: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  fig, ax = plt.subplots()
+time spent on get_obj_CARSn: 6.12s
+time spent on add_epsilon_cnstr: 2.76s
+time spent on add_demand_cnstr: 23.94s
+time spent on set_optimal_flows: 6.53s
+time spent on get_OD_result_flows: 7.13s
+time spent on solve_bush_CARSn: 1848.83s
+time spent on solve_flow_decomposition_D: 45.81s
+time spent on routeFinder_OD: 252.87s
+0
+1
+2
+3
+4
+time spent on solve_flow_decomposition_D: 33.21s
+time spent on routeFinder_OD: 253.51s
+0
+1
+2
+3
+4
+5
+time spent on solve_flow_decomposition_D: 46.45s
+time spent on routeFinder_OD: 255.20s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 71.16s
+time spent on routeFinder_OD: 260.19s
+0
+1
+2
+3
+4
+5
+6
+7
+time spent on solve_flow_decomposition_D: 51.20s
+time spent on routeFinder_OD: 255.90s
+0
+1
+2
+3
+4
+5
+time spent on solve_flow_decomposition_D: 51.57s
+time spent on routeFinder_OD: 255.12s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+time spent on solve_flow_decomposition_D: 52.18s
+time spent on routeFinder_OD: 254.90s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+time spent on solve_flow_decomposition_D: 52.88s
+time spent on routeFinder_OD: 254.62s
+0
+1
+2
+3
+4
+5
+6
+7
+time spent on solve_flow_decomposition_D: 70.35s
+time spent on routeFinder_OD: 253.45s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+time spent on solve_flow_decomposition_D: 52.21s
+time spent on routeFinder_OD: 253.67s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+time spent on solve_flow_decomposition_D: 46.42s
+time spent on routeFinder_OD: 253.06s
+0
+time spent on solve_flow_decomposition_D: 50.33s
+time spent on routeFinder_OD: 258.82s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 49.16s
+time spent on routeFinder_OD: 261.72s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 56.87s
+time spent on routeFinder_OD: 254.91s
+0
+1
+2
+3
+4
+time spent on solve_flow_decomposition_D: 54.13s
+time spent on routeFinder_OD: 256.52s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 55.53s
+time spent on routeFinder_OD: 253.96s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+time spent on solve_flow_decomposition_D: 55.01s
+time spent on routeFinder_OD: 255.68s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 54.28s
+time spent on routeFinder_OD: 253.16s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 51.88s
+time spent on routeFinder_OD: 253.83s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 44.02s
+time spent on routeFinder_OD: 254.08s
+0
+1
+2
+3
+4
+5
+6
+7
+time spent on solve_flow_decomposition_D: 53.31s
+time spent on routeFinder_OD: 255.99s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 43.35s
+time spent on routeFinder_OD: 256.41s
+0
+1
+2
+3
+4
+5
+6
+7
+time spent on solve_flow_decomposition_D: 53.57s
+time spent on routeFinder_OD: 255.00s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 47.72s
+time spent on routeFinder_OD: 256.76s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+time spent on solve_flow_decomposition_D: 50.80s
+time spent on routeFinder_OD: 2.75s
+0
+time spent on solve_flow_decomposition_D: 54.38s
+time spent on routeFinder_OD: 256.04s
+0
+1
+2
+3
+time spent on solve_flow_decomposition_D: 53.37s
+time spent on routeFinder_OD: 254.87s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 49.03s
+time spent on routeFinder_OD: 258.32s
+0
+1
+2
+3
+4
+5
+6
+7
+time spent on solve_flow_decomposition_D: 42.52s
+time spent on routeFinder_OD: 252.97s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 47.87s
+time spent on routeFinder_OD: 259.96s
+0
+1
+2
+3
+4
+5
+6
+7
+time spent on solve_flow_decomposition_D: 45.80s
+time spent on routeFinder_OD: 255.35s
+0
+1
+2
+3
+4
+time spent on solve_flow_decomposition_D: 46.38s
+time spent on routeFinder_OD: 255.09s
+0
+1
+2
+3
+4
+time spent on solve_flow_decomposition_D: 55.53s
+time spent on routeFinder_OD: 257.91s
+0
+1
+2
+3
+4
+time spent on solve_flow_decomposition_D: 53.84s
+time spent on routeFinder_OD: 252.63s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+time spent on solve_flow_decomposition_D: 48.11s
+time spent on routeFinder_OD: 259.06s
+0
+1
+2
+3
+4
+5
+6
+7
+time spent on solve_flow_decomposition_D: 64.90s
+time spent on routeFinder_OD: 254.72s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+time spent on solve_flow_decomposition_D: 44.55s
+time spent on routeFinder_OD: 254.30s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 55.41s
+time spent on routeFinder_OD: 257.47s
+0
+1
+2
+3
+4
+time spent on solve_flow_decomposition_D: 58.29s
+time spent on routeFinder_OD: 252.39s
+0
+1
+2
+3
+time spent on solve_flow_decomposition_D: 57.14s
+time spent on routeFinder_OD: 256.57s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+time spent on solve_flow_decomposition_D: 59.24s
+time spent on routeFinder_OD: 253.22s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+time spent on solve_flow_decomposition_D: 50.16s
+time spent on routeFinder_OD: 276.00s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 56.25s
+time spent on routeFinder_OD: 261.51s
+0
+1
+2
+3
+4
+time spent on solve_flow_decomposition_D: 64.73s
+time spent on routeFinder_OD: 40.73s
+0
+time spent on solve_flow_decomposition_D: 47.67s
+time spent on routeFinder_OD: 261.94s
+0
+1
+2
+3
+time spent on solve_flow_decomposition_D: 57.16s
+time spent on routeFinder_OD: 261.56s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 40.89s
+time spent on routeFinder_OD: 9.84s
+0
+1
+time spent on solve_flow_decomposition_D: 56.55s
+time spent on routeFinder_OD: 251.45s
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+time spent on solve_flow_decomposition_D: 57.44s
+time spent on routeFinder_OD: 255.70s
+0
+1
+2
+3
+4
+5
+6
+time spent on solve_flow_decomposition_D: 44.95s
+time spent on routeFinder_OD: 256.25s
+0
+1
+2
+3
+4
+5
+6
+7
