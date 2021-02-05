@@ -54,15 +54,29 @@ def plot_costPenRate(fname, ax, parameters, k):
 	ax.set_xlabel('Penetration Rate')
 	ax.set_ylabel('Avg. Travel Time (min)')
 	ax.set_xlim((0, 1))
+	ax.set_ylim((5, 18))
 	ax.legend(framealpha=0.8, fontsize='small', frameon=True, facecolor='w', fancybox='False')
 	#ax.legend.get_frame().set_linewidth(0.2)
 	return ax
 
+def multiply_list(a,list_):
+	return [x*a for x in list_]
 
 def plot_flowPenRate(fname, ax, parameters):
 	n, cavsCost, noncavsCost, totCost, cavsFlow, nonCavsFlow, pedestrianFlow, rebalancingFlow, bikeFlow, subwayFlow = read_result(fname)
 	width = 0.9
 	x_name = [round(.1 * i, 1) for i in range(11)]
+	cavsFlow[0] = 0
+	pedestrianFlow[0] = 0 
+	rebalancingFlow[0] = 0
+	bikeFlow[0]=0
+	subwayFlow[0]=0
+	nonCavsFlow = multiply_list(1.60934, nonCavsFlow)
+	cavsFlow = multiply_list(1.60934, cavsFlow)
+	pedestrianFlow = multiply_list(1.60934, pedestrianFlow)
+	rebalancingFlow = multiply_list(1.60934, rebalancingFlow)
+	bikeFlow = multiply_list(1.60934, bikeFlow)
+	subwayFlow = multiply_list(1.60934, subwayFlow)
 	x = list(range(len(x_name)))
 	p1 = ax.bar(x, nonCavsFlow, width, label='Private')
 	p2 = ax.bar(x, cavsFlow, width,
@@ -82,10 +96,11 @@ def plot_flowPenRate(fname, ax, parameters):
 	                     range(len(cavsFlow))], label='Biking')
 
 
-	ax.set_ylabel('Miles per mode of transport')
+	ax.set_ylabel('Kilometers traveled')
 	ax.set_xlabel('Penetration rate')
 	ax.set_xticks(x)
 	ax.set_xticklabels(x_name)
+	ax.set_ylim((0, 6e6))
 	ax.legend(framealpha=0.8, fontsize='small', frameon=True, loc=3, facecolor='w', fancybox='False')
 	#ax.legend.get_frame().set_linewidth(0.2)
 	return ax
@@ -110,9 +125,8 @@ plt.savefig('b.pdf')
 def plot_comparison(fnames, out):
 	fig, ax = plt.subplots(ncols=2, 
 							nrows=len(fnames), 
-						#	width_ratios=[1,2], 
 							gridspec_kw={'width_ratios':[1,2]},
-							figsize=(3.6*2, 2*len(fnames)), 
+							figsize=(3.2*2, 2*len(fnames)), 
 							#sharex=True, 
 							sharey=False)
 	j = 0
@@ -120,10 +134,10 @@ def plot_comparison(fnames, out):
 		fname = 'results/' + f + '/results.csv'
 		parameters = read_parameters('results/' + f + '/parameters.txt' )
 		if out =='1c':
-			plot_costPenRate(fname, ax[j,0], parameters, 'A')
+			plot_costPenRate(fname, ax[0], parameters, 'A')
 		else:
-			plot_costPenRate(fname, ax[j,0], parameters, 'B')
-		plot_flowPenRate(fname, ax[j,1], parameters)
+			plot_costPenRate(fname, ax[0], parameters, 'B')
+		plot_flowPenRate(fname, ax[1], parameters)
 		j  +=1
 	#plt.legend(frameon=True, fancybox=False)
 	plt.tight_layout()
@@ -136,7 +150,7 @@ three = '2021-01-08_11/51/44_penRate_NYC_2.0A_Reb_True'.replace('/', ':')
 four = '2021-01-08_11/51/44_penRate_NYC_4.0A_Reb_True'.replace('/', ':')
 fnames = [one, two, three, four]
 
-plot_comparison(fnames,'1c')
+#plot_comparison(fnames,'1c')
 
 
 one = '2021-01-08_11/50/19_penRate_NYC_1.0AS_Reb_True'.replace('/', ':')
@@ -145,7 +159,7 @@ three = '2021-01-08_11/51/44_penRate_NYC_2.0AS_Reb_True'.replace('/', ':')
 four = '2021-01-08_11/51/43_penRate_NYC_4.0AS_Reb_True'.replace('/', ':')
 fnames = [one, two, three, four]
 
-plot_comparison(fnames,'1_5c')
+#plot_comparison(fnames,'1_5c')
 
 
 
@@ -156,7 +170,7 @@ three = '2021-01-08_11/51/44_penRate_NYC_2.0ASP_Reb_True'.replace('/', ':')
 four = '2021-01-08_11/52/40_penRate_NYC_4.0ASP_Reb_True'.replace('/', ':')
 fnames = [one, two, three, four]
 
-plot_comparison(fnames,'2c')
+#plot_comparison(fnames,'2c')
 
 
 
@@ -166,7 +180,7 @@ three = '2021-01-12_00:58:41_penRate_NYC_2.0ASPB_Reb_True'.replace('/', ':')
 four = '2021-01-14_02:00:28_penRate_NYC_4.0ASPB_Reb_True'.replace('/', ':')
 fnames = [one, two, three, four]
 
-plot_comparison(fnames,'4c')
+#plot_comparison(fnames,'4c')
 
 one = '2021-01-08_11/51/44_penRate_NYC_2.0A_Reb_True'.replace('/', ':')
 two = '2021-01-08_11/51/44_penRate_NYC_2.0AS_Reb_True'.replace('/', ':')
@@ -174,8 +188,11 @@ three = '2021-01-08_11/51/44_penRate_NYC_2.0ASP_Reb_True'.replace('/', ':')
 four = '2021-01-12_00:58:41_penRate_NYC_2.0ASPB_Reb_True'.replace('/', ':')
 fnames = [one, two, three, four]
 
-plot_comparison(fnames,'4c')
+#plot_comparison(fnames,'4c')
 
-
+cnt = 0
+for i in fnames:
+	cnt+=1
+	plot_comparison([i],'intermodal_'+str(cnt)	)
 
 
