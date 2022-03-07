@@ -112,7 +112,7 @@ def plot_comparison(fnames, out):
 							nrows=len(fnames), 
 						#	width_ratios=[1,2], 
 							gridspec_kw={'width_ratios':[1,2]},
-							figsize=(3.6*2, 2*len(fnames)), 
+							figsize=(3.6*1.7, 1.7*len(fnames)),
 							#sharex=True, 
 							sharey=False)
 	j = 0
